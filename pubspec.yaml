@@ -18,6 +18,7 @@ dependencies:
 
   # Ícones estilo iOS
   cupertino_icons: ^1.0.8
+  http: ^1.2.2
 
 # Dependências para desenvolvimento e testes
 dev_dependencies:
