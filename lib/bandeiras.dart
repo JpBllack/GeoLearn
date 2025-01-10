@@ -174,12 +174,26 @@ class _BandeirasPageState extends State<BandeirasPage> {
                     if (isAnswerSelected && !isCorrect!)
                       Padding(
                         padding: const EdgeInsets.only(top: 10),
-                        child: Text(
-                          'Resposta correta: ${currentCountry?['name']['common']}',
-                          style: const TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18),
+                        child: FutureBuilder<String>(
+                          future: _translateCountryName(currentCountry?['name']['common'] ?? ''),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                              return const CircularProgressIndicator();
+                            }
+
+                            if (snapshot.hasError) {
+                              return const Text('Erro ao traduzir nome do país');
+                            }
+
+                            final translatedCountryName = snapshot.data ?? '';
+                            return Text(
+                              'Resposta correta: $translatedCountryName',
+                              style: const TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18),
+                            );
+                          },
                         ),
                       ),
                   ],
