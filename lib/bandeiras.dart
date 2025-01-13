@@ -16,7 +16,10 @@ class _BandeirasPageState extends State<BandeirasPage> {
   List<String> options = [];
   String? selectedAnswer;
   bool? isCorrect;
-  String title = 'Guess the Country by its Flag';
+  int correctAnswers = 0;
+  int totalFlags = 0;
+  static const int maxFlags = 15; // Total de bandeiras por rodada
+  String title = 'Advinhe a Bandeira pelo Nome';
   bool isAnswerSelected = false;
 
   @override
@@ -49,11 +52,17 @@ class _BandeirasPageState extends State<BandeirasPage> {
   void _newRound() {
     if (countries.isEmpty) return;
 
+    if (totalFlags >= maxFlags) {
+      _showFinalScore();
+      return;
+    }
+
     setState(() {
       currentCountry = countries[Random().nextInt(countries.length)];
       isAnswerSelected = false;
       selectedAnswer = null;
       options = _generateOptions();
+      totalFlags++; // Incrementa o total de bandeiras apresentadas
     });
   }
 
@@ -62,7 +71,7 @@ class _BandeirasPageState extends State<BandeirasPage> {
     final incorrect = (countries..shuffle())
         .map((country) => country['name']['common'])
         .where((name) => name != correct)
-        .toSet() // Remove duplicates
+        .toSet()
         .take(3)
         .toList();
 
@@ -77,11 +86,39 @@ class _BandeirasPageState extends State<BandeirasPage> {
       selectedAnswer = answer;
       isCorrect = isThisCorrect;
       isAnswerSelected = true;
+      if (isThisCorrect) correctAnswers++; // Incrementa apenas em caso de acerto
     });
 
     Future.delayed(const Duration(seconds: 2), () {
       if (mounted) _newRound();
     });
+  }
+
+  void _showFinalScore() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => AlertDialog(
+        title: const Text('Fim do Jogo!'),
+        content: Text(
+          'Você acertou $correctAnswers de $maxFlags bandeiras!',
+          style: const TextStyle(fontSize: 18),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              setState(() {
+                correctAnswers = 0;
+                totalFlags = 0;
+                fetchCountries();
+              });
+              Navigator.of(context).pop();
+            },
+            child: const Text('Jogar Novamente'),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -112,6 +149,17 @@ class _BandeirasPageState extends State<BandeirasPage> {
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
           ),
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: Center(
+              child: Text(
+                'Bandeiras: $totalFlags/$maxFlags',
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+        ],
       ),
       body: Container(
         color: const Color(0xFF38CFFD),
@@ -134,7 +182,7 @@ class _BandeirasPageState extends State<BandeirasPage> {
                           height: 150,
                           color: Colors.grey,
                           child: const Center(
-                            child: Text('Image unavailable'),
+                            child: Text('Imagem Indisponível'),
                           ),
                         );
                       },
@@ -143,7 +191,7 @@ class _BandeirasPageState extends State<BandeirasPage> {
                       Padding(
                         padding: const EdgeInsets.only(top: 10),
                         child: Text(
-                          'Correct answer: ${currentCountry?['name']['common'] ?? ''}',
+                          'Resposta Correta: ${currentCountry?['name']['common'] ?? ''}',
                           style: const TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
