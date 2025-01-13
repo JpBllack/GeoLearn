@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:translator/translator.dart';
 import 'dart:convert';
 import 'dart:math';
 
@@ -17,16 +16,13 @@ class _BandeirasPageState extends State<BandeirasPage> {
   List<String> options = [];
   String? selectedAnswer;
   bool? isCorrect;
-  String translatedTitle = 'De qual País é essa Bandeira?';
-  bool isAnswerSelected = false; // Nova variável para controlar quando a resposta foi selecionada
-
-  final translator = GoogleTranslator();
+  String title = 'Guess the Country by its Flag';
+  bool isAnswerSelected = false;
 
   @override
   void initState() {
     super.initState();
     fetchCountries();
-    _translateText('De qual País é essa Bandeira?', 'pt');
   }
 
   Future<void> fetchCountries() async {
@@ -41,78 +37,50 @@ class _BandeirasPageState extends State<BandeirasPage> {
           _newRound();
         });
       } else {
-        print('Erro ao carregar os dados da API. Status: ${response.statusCode}');
+        debugPrint('Failed to load data. Status: ${response.statusCode}');
       }
     } catch (e) {
-      print('Erro ao carregar os dados da API: $e');
+      debugPrint('Error loading data: $e');
       await Future.delayed(const Duration(seconds: 5));
       fetchCountries();
     }
   }
 
-  Future<void> _translateText(String text, [String toLang = 'pt']) async {
-    try {
-      final translation = await translator.translate(text, to: toLang);
-      setState(() {
-        translatedTitle = translation.text;
-      });
-    } catch (e) {
-      print('Erro ao traduzir o texto: $e');
-    }
-  }
-
-  Future<String> _translateCountryName(String countryName) async {
-    try {
-      final translation = await translator.translate(countryName, to: 'pt');
-      return translation.text;
-    } catch (e) {
-      print('Erro ao traduzir o nome do país: $e');
-      return countryName; // Retorna o nome original caso não consiga traduzir
-    }
-  }
-
-  Future<void> _newRound() async {
+  void _newRound() {
     if (countries.isEmpty) return;
 
     setState(() {
       currentCountry = countries[Random().nextInt(countries.length)];
-      isAnswerSelected = false; // Resetamos a flag quando começa uma nova rodada
+      isAnswerSelected = false;
+      selectedAnswer = null;
+      options = _generateOptions();
     });
-
-    options = await _generateOptions();
-    setState(() {});
   }
 
-  Future<List<String>> _generateOptions() async {
+  List<String> _generateOptions() {
     final correct = currentCountry?['name']['common'];
     final incorrect = (countries..shuffle())
-        .take(3)
         .map((country) => country['name']['common'])
         .where((name) => name != correct)
+        .toSet() // Remove duplicates
+        .take(3)
         .toList();
 
-    final allCountries = [correct, ...incorrect];
-    
-    // Traduzindo os nomes dos países para português
-    List<String> translatedOptions = [];
-    for (var country in allCountries) {
-      translatedOptions.add(await _translateCountryName(country));
-    }
-
-    return translatedOptions..shuffle();
+    final allOptions = [correct, ...incorrect]..shuffle();
+    return allOptions.cast<String>();
   }
 
   void _checkAnswer(String answer) {
+    final isThisCorrect = answer == currentCountry?['name']['common'];
+
     setState(() {
       selectedAnswer = answer;
-      isCorrect = answer == currentCountry?['name']['common'];
-      isAnswerSelected = true; // Marca que a resposta foi selecionada
+      isCorrect = isThisCorrect;
+      isAnswerSelected = true;
     });
 
     Future.delayed(const Duration(seconds: 2), () {
-      if (mounted) {
-        _newRound(); // Gera a próxima rodada
-      }
+      if (mounted) _newRound();
     });
   }
 
@@ -124,7 +92,7 @@ class _BandeirasPageState extends State<BandeirasPage> {
           backgroundColor: const Color(0xFF38CFFD),
           title: Center(
             child: Text(
-              translatedTitle,
+              title,
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
           ),
@@ -140,7 +108,7 @@ class _BandeirasPageState extends State<BandeirasPage> {
         backgroundColor: const Color(0xFF38CFFD),
         title: Center(
           child: Text(
-            translatedTitle,
+            title,
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
           ),
         ),
@@ -166,7 +134,7 @@ class _BandeirasPageState extends State<BandeirasPage> {
                           height: 150,
                           color: Colors.grey,
                           child: const Center(
-                            child: Text('Imagem indisponível'),
+                            child: Text('Image unavailable'),
                           ),
                         );
                       },
@@ -174,26 +142,12 @@ class _BandeirasPageState extends State<BandeirasPage> {
                     if (isAnswerSelected && !isCorrect!)
                       Padding(
                         padding: const EdgeInsets.only(top: 10),
-                        child: FutureBuilder<String>(
-                          future: _translateCountryName(currentCountry?['name']['common'] ?? ''),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState == ConnectionState.waiting) {
-                              return const CircularProgressIndicator();
-                            }
-
-                            if (snapshot.hasError) {
-                              return const Text('Erro ao traduzir nome do país');
-                            }
-
-                            final translatedCountryName = snapshot.data ?? '';
-                            return Text(
-                              'Resposta correta: $translatedCountryName',
-                              style: const TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18),
-                            );
-                          },
+                        child: Text(
+                          'Correct answer: ${currentCountry?['name']['common'] ?? ''}',
+                          style: const TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18),
                         ),
                       ),
                   ],
@@ -207,13 +161,13 @@ class _BandeirasPageState extends State<BandeirasPage> {
                   alignment: WrapAlignment.center,
                   spacing: 10,
                   runSpacing: 10,
-                  children: options.map((country) {
-                    bool isSelected = country == selectedAnswer;
-                    bool isThisCorrect = country == currentCountry?['name']['common'];
+                  children: options.map((option) {
+                    final isSelected = option == selectedAnswer;
+                    final isThisCorrect = option == currentCountry?['name']['common'];
 
                     return ElevatedButton(
-                      onPressed: !isAnswerSelected // Desabilita os botões após a seleção da resposta
-                          ? () => _checkAnswer(country)
+                      onPressed: !isAnswerSelected
+                          ? () => _checkAnswer(option)
                           : null,
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(
@@ -226,7 +180,7 @@ class _BandeirasPageState extends State<BandeirasPage> {
                             : null,
                       ),
                       child: Text(
-                        country,
+                        option,
                         style: const TextStyle(fontSize: 16),
                       ),
                     );
