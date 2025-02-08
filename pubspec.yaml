@@ -40,16 +40,33 @@ flutter:
     - assets/images/paises.png
     - assets/images/bandeiras.png
     - assets/images/estados.png
-
-  # Exemplo comentado para adicionar fontes personalizadas
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
+    - assets/images/brasil.png
+    - assets/images/estados-unidos.png
+    - assets/images/alemanha.png
+    # Assets dos estados
+    - assets/images/ac.png
+    - assets/images/al.png
+    - assets/images/ap.png
+    - assets/images/am.png
+    - assets/images/bh.png
+    - assets/images/ce.png
+    - assets/images/df.png
+    - assets/images/es.png
+    - assets/images/go.png
+    - assets/images/ma.png
+    - assets/images/mt.png
+    - assets/images/mg.png
+    - assets/images/pa.png
+    - assets/images/pb.png
+    - assets/images/pr.png
+    - assets/images/pe.png
+    - assets/images/pi.png
+    - assets/images/rj.png
+    - assets/images/rn.png
+    - assets/images/rs.png
+    - assets/images/ro.png
+    - assets/images/rr.png
+    - assets/images/sc.png
+    - assets/images/sp.png
+    - assets/images/se.png
+    - assets/images/to.png
