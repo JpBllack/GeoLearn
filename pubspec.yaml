@@ -43,30 +43,47 @@ flutter:
     - assets/images/brasil.png
     - assets/images/estados-unidos.png
     - assets/images/alemanha.png
-    # Assets dos estados
-    - assets/images/ac.png
-    - assets/images/al.png
-    - assets/images/ap.png
-    - assets/images/am.png
-    - assets/images/bh.png
-    - assets/images/ce.png
-    - assets/images/df.png
-    - assets/images/es.png
-    - assets/images/go.png
-    - assets/images/ma.png
-    - assets/images/mt.png
-    - assets/images/mg.png
-    - assets/images/pa.png
-    - assets/images/pb.png
-    - assets/images/pr.png
-    - assets/images/pe.png
-    - assets/images/pi.png
-    - assets/images/rj.png
-    - assets/images/rn.png
-    - assets/images/rs.png
-    - assets/images/ro.png
-    - assets/images/rr.png
-    - assets/images/sc.png
-    - assets/images/sp.png
-    - assets/images/se.png
-    - assets/images/to.png
+    # Assets dos estados brasileiros
+    - assets/images/flagsbr/ac.png
+    - assets/images/flagsbr/al.png
+    - assets/images/flagsbr/ap.png
+    - assets/images/flagsbr/am.png
+    - assets/images/flagsbr/bh.png
+    - assets/images/flagsbr/ce.png
+    - assets/images/flagsbr/df.png
+    - assets/images/flagsbr/es.png
+    - assets/images/flagsbr/go.png
+    - assets/images/flagsbr/ma.png
+    - assets/images/flagsbr/mt.png
+    - assets/images/flagsbr/mg.png
+    - assets/images/flagsbr/pa.png
+    - assets/images/flagsbr/pb.png
+    - assets/images/flagsbr/pr.png
+    - assets/images/flagsbr/pe.png
+    - assets/images/flagsbr/pi.png
+    - assets/images/flagsbr/rj.png
+    - assets/images/flagsbr/rn.png
+    - assets/images/flagsbr/rs.png
+    - assets/images/flagsbr/ro.png
+    - assets/images/flagsbr/rr.png
+    - assets/images/flagsbr/sc.png
+    - assets/images/flagsbr/sp.png
+    - assets/images/flagsbr/se.png
+    - assets/images/flagsbr/to.png
+    # Assets dos estados alemães
+    - assets/images/flagsal/bw.png
+    - assets/images/flagsal/by.png
+    - assets/images/flagsal/be.png
+    - assets/images/flagsal/bb.png
+    - assets/images/flagsal/hb.png
+    - assets/images/flagsal/hh.png
+    - assets/images/flagsal/he.png
+    - assets/images/flagsal/mv.png
+    - assets/images/flagsal/ni.png
+    - assets/images/flagsal/nw.png
+    - assets/images/flagsal/rp.png
+    - assets/images/flagsal/sl.png
+    - assets/images/flagsal/sn.png
+    - assets/images/flagsal/st.png
+    - assets/images/flagsal/sh.png
+    - assets/images/flagsal/th.png

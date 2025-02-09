@@ -13,7 +13,7 @@ class EstadosUnidosMunicipios extends StatelessWidget {
       ),
       body: const Center(
         child: Text(
-          'Lista de Municípios dos Estados Unidos',
+          'Em Breve',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
       ),
