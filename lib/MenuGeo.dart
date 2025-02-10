@@ -4,8 +4,16 @@ import 'PaisesPage.dart';
 import 'bandeiras.dart';
 import 'estados.dart';
 
-class MenuGeo extends StatelessWidget {
+class MenuGeo extends StatefulWidget {
   const MenuGeo({super.key});
+
+  @override
+  _MenuGeoState createState() => _MenuGeoState();
+}
+
+class _MenuGeoState extends State<MenuGeo> {
+  bool _isMusicOn = false;
+  bool _isSoundOn = false;
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +27,14 @@ class MenuGeo extends StatelessWidget {
           color: Colors.white,
           fontWeight: FontWeight.bold,
         ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.settings, color: Colors.white, size: 30),
+            onPressed: () {
+              _showSettingsDialog(context);
+            },
+          ),
+        ],
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -26,26 +42,26 @@ class MenuGeo extends StatelessWidget {
         ),
         child: Center(
           child: Row(
-            mainAxisAlignment:
-                MainAxisAlignment.center, // Centraliza na vertical
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SquareWidget(
-                imagePath: 'assets/images/bandeiras.png', 
-                routeName: 'Bandeiras', 
-                name: 'Bandeiras', 
-                destination: BandeirasPage()),
-
-                SquareWidget(
-                imagePath: 'assets/images/estados.png', 
-                routeName: 'Estados', 
-                name: 'Estados', 
-                destination: EstadosPage()),
-
-                SquareWidget(
-                imagePath: 'assets/images/paises.png', 
-                routeName: 'Países', 
-                name: 'Países', 
-                destination: PaisesPage())
+                imagePath: 'assets/images/bandeiras.png',
+                routeName: 'Bandeiras',
+                name: 'Bandeiras',
+                destination: BandeirasPage(),
+              ),
+              SquareWidget(
+                imagePath: 'assets/images/estados.png',
+                routeName: 'Estados',
+                name: 'Estados',
+                destination: EstadosPage(),
+              ),
+              SquareWidget(
+                imagePath: 'assets/images/paises.png',
+                routeName: 'Países',
+                name: 'Países',
+                destination: PaisesPage(),
+              ),
             ],
           ),
         ),
@@ -53,4 +69,55 @@ class MenuGeo extends StatelessWidget {
     );
   }
 
- }
+  void _showSettingsDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Configurações'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Música'),
+                  Switch(
+                    value: _isMusicOn,
+                    onChanged: (value) {
+                      setState(() {
+                        _isMusicOn = value;
+                      });
+                    },
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Sons'),
+                  Switch(
+                    value: _isSoundOn,
+                    onChanged: (value) {
+                      setState(() {
+                        _isSoundOn = value;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              child: Text('Fechar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
