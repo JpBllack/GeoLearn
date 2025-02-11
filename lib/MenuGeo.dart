@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolearn/audiogame.dart';
 import 'package:geolearn/square_widget.dart';
 import 'PaisesPage.dart';
 import 'bandeiras.dart';
@@ -69,7 +70,7 @@ class _MenuGeoState extends State<MenuGeo> {
     );
   }
 
-  void _showSettingsDialog(BuildContext context) {
+   void _showSettingsDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -87,6 +88,11 @@ class _MenuGeoState extends State<MenuGeo> {
                     onChanged: (value) {
                       setState(() {
                         _isMusicOn = value;
+                        if (_isMusicOn) {
+                          AudioGame().playMusic(); // Toca a música
+                        } else {
+                          AudioGame().pauseMusic(); // Pausa a música
+                        }
                       });
                     },
                   ),

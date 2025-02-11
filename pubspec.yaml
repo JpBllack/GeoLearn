@@ -20,6 +20,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   http: ^1.2.2
   translator: 1.0.3+1
+  audioplayers: ^6.1.2
 
 # Dependências para desenvolvimento e testes
 dev_dependencies:
@@ -87,3 +88,6 @@ flutter:
     - assets/images/flagsal/st.png
     - assets/images/flagsal/sh.png
     - assets/images/flagsal/th.png
+    #musica game
+    - assets/songs/musica.mp3
+    - assets/songs/som_botao.mp3
