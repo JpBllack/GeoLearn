@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 // Função principal: Inicia o aplicativo
 void main() 
 {
-   WidgetsFlutterBinding.ensureInitialized();;
+   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.landscapeLeft,
     DeviceOrientation.landscapeRight,
