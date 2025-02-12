@@ -1,8 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:geolearn/MenuGeo.dart';
+import 'package:flutter/services.dart';
 
 // Função principal: Inicia o aplicativo
-void main() => runApp(GeoLearnApp());
+void main() 
+{
+   WidgetsFlutterBinding.ensureInitialized();;
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.landscapeLeft,
+    DeviceOrientation.landscapeRight,
+  ]).then((_){
+    runApp(GeoLearnApp());
+  });
+}
 
 // Widget principal do aplicativo
 class GeoLearnApp extends StatelessWidget {
