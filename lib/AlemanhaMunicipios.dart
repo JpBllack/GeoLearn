@@ -53,22 +53,18 @@ class _AlemanhaMunicipiosState extends State<AlemanhaMunicipios> {
     final List data = json.decode(jsonData);
     setState(() {
       municipios = data;
-      // Inicializa a lista de municípios disponíveis com uma cópia dos dados
       municipiosDisponiveis = List.from(data);
       iniciarNovaRodada();
     });
   }
 
   void iniciarNovaRodada() {
-    // Se não houver mais municípios disponíveis ou se o número máximo de rodadas for atingido,
-    // exibe a pontuação final.
     if (municipiosDisponiveis.isEmpty || totalRodadas >= maxRodadas) {
       exibirPontuacaoFinal();
       return;
     }
 
     setState(() {
-      // Seleciona aleatoriamente um município dos disponíveis e remove-o para não repetir.
       int index = Random().nextInt(municipiosDisponiveis.length);
       municipioAtual = municipiosDisponiveis.removeAt(index);
       respostaConfirmada = false;
@@ -80,7 +76,6 @@ class _AlemanhaMunicipiosState extends State<AlemanhaMunicipios> {
 
   List<String> gerarOpcoes() {
     final correto = municipioAtual?['nome'];
-    // Gera opções incorretas a partir da lista completa
     final incorretos = (municipios..shuffle())
         .map((m) => m['nome'])
         .where((nome) => nome != correto)
@@ -101,7 +96,6 @@ class _AlemanhaMunicipiosState extends State<AlemanhaMunicipios> {
       if (estaCerta) acertos++;
     });
 
-    // Após 2 segundos, inicia a próxima rodada.
     Future.delayed(const Duration(seconds: 2), () {
       if (mounted) {
         iniciarNovaRodada();
@@ -125,7 +119,6 @@ class _AlemanhaMunicipiosState extends State<AlemanhaMunicipios> {
               setState(() {
                 acertos = 0;
                 totalRodadas = 0;
-                // Reinicializa a lista de disponíveis
                 municipiosDisponiveis = List.from(municipios);
                 iniciarNovaRodada();
               });
@@ -163,7 +156,11 @@ class _AlemanhaMunicipiosState extends State<AlemanhaMunicipios> {
         title: Center(
           child: Text(
             titulo,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 30,
+            ),
           ),
         ),
         actions: [
@@ -173,7 +170,10 @@ class _AlemanhaMunicipiosState extends State<AlemanhaMunicipios> {
               child: Text(
                 'Rodada: $totalRodadas/$maxRodadas',
                 style: const TextStyle(
-                    fontSize: 16, fontWeight: FontWeight.bold),
+                  color: Colors.white,
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),
@@ -181,80 +181,77 @@ class _AlemanhaMunicipiosState extends State<AlemanhaMunicipios> {
       ),
       body: Container(
         color: Colors.blue.shade100,
-        child: Column(
-          children: [
-            Expanded(
-              flex: 3,
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      imagemBandeira,
-                      width: 200,
-                      height: 150,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Container(
-                          width: 200,
-                          height: 150,
-                          color: Colors.grey,
-                          child: const Center(
-                            child: Text('Imagem não encontrada'),
-                          ),
-                        );
-                      },
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center, 
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // Bandeira
+              Image.asset(
+                imagemBandeira,
+                width: 200,
+                height: 150,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    width: 200,
+                    height: 150,
+                    color: Colors.grey,
+                    child: const Center(
+                      child: Text('Imagem não encontrada'),
                     ),
-                    if (respostaConfirmada && !(estaCorreto ?? false))
-                      Padding(
-                        padding: const EdgeInsets.only(top: 10),
-                        child: Text(
-                          'Resposta Correta: ${municipioAtual?['nome'] ?? ''}',
-                          style: const TextStyle(
-                              color: Colors.red,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18),
-                        ),
-                      ),
-                  ],
-                ),
+                  );
+                },
               ),
-            ),
-            Expanded(
-              flex: 2,
-              child: Center(
-                child: Wrap(
-                  alignment: WrapAlignment.center,
-                  spacing: 10,
-                  runSpacing: 10,
-                  children: opcoes.map((opcao) {
-                    final estaSelecionado = opcao == respostaSelecionada;
-                    final estaCerto = opcao == municipioAtual?['nome'];
 
-                    return ElevatedButton(
-                      onPressed: respostaConfirmada
-                          ? null
-                          : () => verificarResposta(opcao),
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 20),
-                        side: estaSelecionado
-                            ? BorderSide(
-                                color: estaCerto ? Colors.green : Colors.red,
-                                width: 3,
-                              )
-                            : null,
-                      ),
-                      child: Text(
-                        opcao,
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                    );
-                  }).toList(),
+              // Se errou a bandeira, mostra a resposta correta
+              if (respostaConfirmada && !(estaCorreto ?? false))
+                Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: Text(
+                    'Resposta Correta: ${municipioAtual?['nome'] ?? ''}',
+                    style: const TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
                 ),
+
+              const SizedBox(height: 30),
+
+              // Opções
+              Wrap(
+                alignment: WrapAlignment.center,
+                spacing: 10,
+                runSpacing: 10,
+                children: opcoes.map((opcao) {
+                  final estaSelecionado = opcao == respostaSelecionada;
+                  final estaCerto = opcao == municipioAtual?['nome'];
+
+                  return ElevatedButton(
+                    onPressed: respostaConfirmada ? null : () => verificarResposta(opcao),
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 10,
+                        horizontal: 20,
+                      ),
+                      side: estaSelecionado
+                          ? BorderSide(
+                              color: estaCerto ? Colors.green : Colors.red,
+                              width: 3,
+                            )
+                          : null,
+                    ),
+                    child: Text(
+                      opcao,
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  );
+                }).toList(),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

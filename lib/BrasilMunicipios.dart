@@ -210,56 +210,52 @@ class _BrasilMunicipiosState extends State<BrasilMunicipios> {
       ),
       body: Container(
         color: Colors.blue.shade100,
-        child: Column(
-          children: [
-            Expanded(
-              flex: 3,
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      imagemBandeira,
+        child: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              // Centraliza tudo na tela
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // Bandeira
+                Image.asset(
+                  imagemBandeira,
+                  width: 200,
+                  height: 150,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
                       width: 200,
                       height: 150,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Container(
-                          width: 200,
-                          height: 150,
-                          color: Colors.grey,
-                          child: const Center(
-                            child: Text(
-                              'Imagem não encontrada',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                    if (respostaConfirmada && !(estaCorreto ?? false))
-                      Padding(
-                        padding: const EdgeInsets.only(top: 10),
+                      color: Colors.grey,
+                      child: const Center(
                         child: Text(
-                          'Resposta Correta: ${municipioAtual?['nome'] ?? ''}',
-                          style: const TextStyle(
-                            color: Colors.red,
+                          'Imagem não encontrada',
+                          style: TextStyle(
+                            fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            fontSize: 20,
                           ),
                         ),
                       ),
-                  ],
+                    );
+                  },
                 ),
-              ),
-            ),
-            Expanded(
-              flex: 2,
-              child: Center(
-                child: Wrap(
+                // Se a resposta estiver confirmada e estiver incorreta, exibe a resposta correta
+                if (respostaConfirmada && !(estaCorreto ?? false))
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Text(
+                      'Resposta Correta: ${municipioAtual?['nome'] ?? ''}',
+                      style: const TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                const SizedBox(height: 30),
+                // Opções
+                Wrap(
                   alignment: WrapAlignment.center,
                   spacing: 10,
                   runSpacing: 10,
@@ -288,9 +284,9 @@ class _BrasilMunicipiosState extends State<BrasilMunicipios> {
                     );
                   }).toList(),
                 ),
-              ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
