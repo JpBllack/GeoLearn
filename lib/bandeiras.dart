@@ -32,7 +32,6 @@ class _BandeirasPageState extends State<BandeirasPage> {
     final url = Uri.parse('https://restcountries.com/v3.1/all?fields=name,flags');
     try {
       final response = await http.get(url).timeout(const Duration(seconds: 10));
-
       if (response.statusCode == 200) {
         final List data = json.decode(response.body);
         setState(() {
@@ -86,7 +85,7 @@ class _BandeirasPageState extends State<BandeirasPage> {
       selectedAnswer = answer;
       isCorrect = isThisCorrect;
       isAnswerSelected = true;
-      if (isThisCorrect) correctAnswers++; // Incrementa apenas em caso de acerto
+      if (isThisCorrect) correctAnswers++;
     });
 
     Future.delayed(const Duration(seconds: 2), () {
@@ -130,7 +129,10 @@ class _BandeirasPageState extends State<BandeirasPage> {
           title: Center(
             child: Text(
               title,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              ),
             ),
           ),
         ),
@@ -146,7 +148,11 @@ class _BandeirasPageState extends State<BandeirasPage> {
         title: Center(
           child: Text(
             title,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 30,
+            ),
           ),
         ),
         actions: [
@@ -155,7 +161,11 @@ class _BandeirasPageState extends State<BandeirasPage> {
             child: Center(
               child: Text(
                 'Bandeiras: $totalFlags/$maxFlags',
-                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),
@@ -163,80 +173,75 @@ class _BandeirasPageState extends State<BandeirasPage> {
       ),
       body: Container(
         color: const Color(0xFF38CFFD),
-        child: Column(
-          children: [
-            Expanded(
-              flex: 3,
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.network(
-                      flagUrl,
-                      width: 200,
-                      height: 150,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Container(
-                          width: 200,
-                          height: 150,
-                          color: Colors.grey,
-                          child: const Center(
-                            child: Text('Imagem Indisponível'),
-                          ),
-                        );
-                      },
+        child: Center(
+          child: Column(
+            // Centraliza tudo no meio da tela
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // Bandeira
+              Image.network(
+                flagUrl,
+                width: 200,
+                height: 150,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    width: 200,
+                    height: 150,
+                    color: Colors.grey,
+                    child: const Center(
+                      child: Text('Imagem Indisponível'),
                     ),
-                    if (isAnswerSelected && !isCorrect!)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 10),
-                        child: Text(
-                          'Resposta Correta: ${currentCountry?['name']['common'] ?? ''}',
-                          style: const TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18),
-                        ),
-                      ),
-                  ],
-                ),
+                  );
+                },
               ),
-            ),
-            Expanded(
-              flex: 2,
-              child: Center(
-                child: Wrap(
-                  alignment: WrapAlignment.center,
-                  spacing: 10,
-                  runSpacing: 10,
-                  children: options.map((option) {
-                    final isSelected = option == selectedAnswer;
-                    final isThisCorrect = option == currentCountry?['name']['common'];
 
-                    return ElevatedButton(
-                      onPressed: !isAnswerSelected
-                          ? () => _checkAnswer(option)
-                          : null,
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 20),
-                        side: isSelected
-                            ? BorderSide(
-                                color: isThisCorrect ? Colors.green : Colors.red,
-                                width: 3,
-                              )
-                            : null,
-                      ),
-                      child: Text(
-                        option,
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                    );
-                  }).toList(),
+              // Se errou, mostra a resposta correta
+              if (isAnswerSelected && !isCorrect!)
+                Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: Text(
+                    'Resposta Correta: ${currentCountry?['name']['common'] ?? ''}',
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
                 ),
+
+              const SizedBox(height: 30),
+
+              // Opções de resposta
+              Wrap(
+                alignment: WrapAlignment.center,
+                spacing: 10,
+                runSpacing: 10,
+                children: options.map((option) {
+                  final isSelected = option == selectedAnswer;
+                  final isThisCorrect = option == currentCountry?['name']['common'];
+
+                  return ElevatedButton(
+                    onPressed: !isAnswerSelected ? () => _checkAnswer(option) : null,
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                      side: isSelected
+                          ? BorderSide(
+                              color: isThisCorrect ? Colors.green : Colors.red,
+                              width: 3,
+                            )
+                          : null,
+                    ),
+                    child: Text(
+                      option,
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  );
+                }).toList(),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -32,53 +32,49 @@ class _BrasilMunicipiosState extends State<BrasilMunicipios> {
     String jsonData = '''
     [
       {"nome": "Acre", "bandeira": "assets/images/flagsbr/ac.png"},
-  {"nome": "Alagoas", "bandeira": "assets/images/flagsbr/al.png"},
-  {"nome": "Amapá", "bandeira": "assets/images/flagsbr/ap.png"},
-  {"nome": "Amazonas", "bandeira": "assets/images/flagsbr/am.png"},
-  {"nome": "Bahia", "bandeira": "assets/images/flagsbr/bh.png"},
-  {"nome": "Ceará", "bandeira": "assets/images/flagsbr/ce.png"},
-  {"nome": "Distrito Federal", "bandeira": "assets/images/flagsbr/df.png"},
-  {"nome": "Espírito Santo", "bandeira": "assets/images/flagsbr/es.png"},
-  {"nome": "Goiás", "bandeira": "assets/images/flagsbr/go.png"},
-  {"nome": "Maranhão", "bandeira": "assets/images/flagsbr/ma.png"},
-  {"nome": "Mato Grosso", "bandeira": "assets/images/flagsbr/mt.png"},
-  {"nome": "Minas Gerais", "bandeira": "assets/images/flagsbr/mg.png"},
-  {"nome": "Pará", "bandeira": "assets/images/flagsbr/pa.png"},
-  {"nome": "Paraíba", "bandeira": "assets/images/flagsbr/pb.png"},
-  {"nome": "Paraná", "bandeira": "assets/images/flagsbr/pr.png"},
-  {"nome": "Pernambuco", "bandeira": "assets/images/flagsbr/pe.png"},
-  {"nome": "Piauí", "bandeira": "assets/images/flagsbr/pi.png"},
-  {"nome": "Rio de Janeiro", "bandeira": "assets/images/flagsbr/rj.png"},
-  {"nome": "Rio Grande do Norte", "bandeira": "assets/images/flagsbr/rn.png"},
-  {"nome": "Rio Grande do Sul", "bandeira": "assets/images/flagsbr/rs.png"},
-  {"nome": "Rondônia", "bandeira": "assets/images/flagsbr/ro.png"},
-  {"nome": "Roraima", "bandeira": "assets/images/flagsbr/rr.png"},
-  {"nome": "Santa Catarina", "bandeira": "assets/images/flagsbr/sc.png"},
-  {"nome": "São Paulo", "bandeira": "assets/images/flagsbr/sp.png"},
-  {"nome": "Sergipe", "bandeira": "assets/images/flagsbr/se.png"},
-  {"nome": "Tocantins", "bandeira": "assets/images/flagsbr/to.png"}
+      {"nome": "Alagoas", "bandeira": "assets/images/flagsbr/al.png"},
+      {"nome": "Amapá", "bandeira": "assets/images/flagsbr/ap.png"},
+      {"nome": "Amazonas", "bandeira": "assets/images/flagsbr/am.png"},
+      {"nome": "Bahia", "bandeira": "assets/images/flagsbr/bh.png"},
+      {"nome": "Ceará", "bandeira": "assets/images/flagsbr/ce.png"},
+      {"nome": "Distrito Federal", "bandeira": "assets/images/flagsbr/df.png"},
+      {"nome": "Espírito Santo", "bandeira": "assets/images/flagsbr/es.png"},
+      {"nome": "Goiás", "bandeira": "assets/images/flagsbr/go.png"},
+      {"nome": "Maranhão", "bandeira": "assets/images/flagsbr/ma.png"},
+      {"nome": "Mato Grosso", "bandeira": "assets/images/flagsbr/mt.png"},
+      {"nome": "Minas Gerais", "bandeira": "assets/images/flagsbr/mg.png"},
+      {"nome": "Pará", "bandeira": "assets/images/flagsbr/pa.png"},
+      {"nome": "Paraíba", "bandeira": "assets/images/flagsbr/pb.png"},
+      {"nome": "Paraná", "bandeira": "assets/images/flagsbr/pr.png"},
+      {"nome": "Pernambuco", "bandeira": "assets/images/flagsbr/pe.png"},
+      {"nome": "Piauí", "bandeira": "assets/images/flagsbr/pi.png"},
+      {"nome": "Rio de Janeiro", "bandeira": "assets/images/flagsbr/rj.png"},
+      {"nome": "Rio Grande do Norte", "bandeira": "assets/images/flagsbr/rn.png"},
+      {"nome": "Rio Grande do Sul", "bandeira": "assets/images/flagsbr/rs.png"},
+      {"nome": "Rondônia", "bandeira": "assets/images/flagsbr/ro.png"},
+      {"nome": "Roraima", "bandeira": "assets/images/flagsbr/rr.png"},
+      {"nome": "Santa Catarina", "bandeira": "assets/images/flagsbr/sc.png"},
+      {"nome": "São Paulo", "bandeira": "assets/images/flagsbr/sp.png"},
+      {"nome": "Sergipe", "bandeira": "assets/images/flagsbr/se.png"},
+      {"nome": "Tocantins", "bandeira": "assets/images/flagsbr/to.png"}
     ]
     ''';
 
     final List data = json.decode(jsonData);
     setState(() {
       municipios = data;
-      // Inicializa a lista de municípios disponíveis com uma cópia dos dados
       municipiosDisponiveis = List.from(data);
       iniciarNovaRodada();
     });
   }
 
   void iniciarNovaRodada() {
-    // Se não houver mais municípios disponíveis ou se o número máximo de rodadas for atingido,
-    // exibe a pontuação final.
     if (municipiosDisponiveis.isEmpty || totalRodadas >= maxRodadas) {
       exibirPontuacaoFinal();
       return;
     }
 
     setState(() {
-      // Seleciona aleatoriamente um município dos disponíveis e remove-o para não repetir.
       int index = Random().nextInt(municipiosDisponiveis.length);
       municipioAtual = municipiosDisponiveis.removeAt(index);
       respostaConfirmada = false;
@@ -90,7 +86,6 @@ class _BrasilMunicipiosState extends State<BrasilMunicipios> {
 
   List<String> gerarOpcoes() {
     final correto = municipioAtual?['nome'];
-    // Gera opções incorretas a partir da lista completa
     final incorretos = (municipios..shuffle())
         .map((m) => m['nome'])
         .where((nome) => nome != correto)
@@ -111,7 +106,6 @@ class _BrasilMunicipiosState extends State<BrasilMunicipios> {
       if (estaCerta) acertos++;
     });
 
-    // Após 2 segundos, inicia a próxima rodada.
     Future.delayed(const Duration(seconds: 2), () {
       if (mounted) {
         iniciarNovaRodada();
@@ -124,10 +118,20 @@ class _BrasilMunicipiosState extends State<BrasilMunicipios> {
       context: context,
       barrierDismissible: false,
       builder: (_) => AlertDialog(
-        title: const Text('Fim do Jogo!'),
+        backgroundColor: const Color(0xFF38CFFD),
+        title: const Text(
+          'Fim do Jogo!',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 40,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
         content: Text(
           'Você acertou $acertos de $maxRodadas!',
-          style: const TextStyle(fontSize: 18),
+          textAlign: TextAlign.center,
+          style: const TextStyle(fontSize: 18, color: Colors.white),
         ),
         actions: [
           TextButton(
@@ -135,13 +139,19 @@ class _BrasilMunicipiosState extends State<BrasilMunicipios> {
               setState(() {
                 acertos = 0;
                 totalRodadas = 0;
-                // Reinicializa a lista de disponíveis
                 municipiosDisponiveis = List.from(municipios);
                 iniciarNovaRodada();
               });
               Navigator.of(context).pop();
             },
-            child: const Text('Jogar Novamente'),
+            child: const Text(
+              'Jogar Novamente',
+              style: TextStyle(
+                fontSize: 30,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
         ],
       ),
@@ -153,11 +163,14 @@ class _BrasilMunicipiosState extends State<BrasilMunicipios> {
     if (municipios.isEmpty || municipioAtual == null) {
       return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.blue,
-          title: Center(
-            child: Text(
-              titulo,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          backgroundColor: const Color(0xFF38CFFD),
+          centerTitle: true,
+          title: Text(
+            titulo,
+            style: const TextStyle(
+              fontSize: 20,
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ),
@@ -169,11 +182,14 @@ class _BrasilMunicipiosState extends State<BrasilMunicipios> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
-        title: Center(
-          child: Text(
-            titulo,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        backgroundColor: const Color(0xFF38CFFD),
+        centerTitle: true,
+        title: Text(
+          titulo,
+          style: const TextStyle(
+            fontSize: 30,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
           ),
         ),
         actions: [
@@ -183,7 +199,10 @@ class _BrasilMunicipiosState extends State<BrasilMunicipios> {
               child: Text(
                 'Rodada: $totalRodadas/$maxRodadas',
                 style: const TextStyle(
-                    fontSize: 16, fontWeight: FontWeight.bold),
+                  fontSize: 20,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),
@@ -210,7 +229,13 @@ class _BrasilMunicipiosState extends State<BrasilMunicipios> {
                           height: 150,
                           color: Colors.grey,
                           child: const Center(
-                            child: Text('Imagem não encontrada'),
+                            child: Text(
+                              'Imagem não encontrada',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
                         );
                       },
@@ -221,9 +246,10 @@ class _BrasilMunicipiosState extends State<BrasilMunicipios> {
                         child: Text(
                           'Resposta Correta: ${municipioAtual?['nome'] ?? ''}',
                           style: const TextStyle(
-                              color: Colors.red,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18),
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
                         ),
                       ),
                   ],
@@ -242,12 +268,9 @@ class _BrasilMunicipiosState extends State<BrasilMunicipios> {
                     final estaCerto = opcao == municipioAtual?['nome'];
 
                     return ElevatedButton(
-                      onPressed: respostaConfirmada
-                          ? null
-                          : () => verificarResposta(opcao),
+                      onPressed: respostaConfirmada ? null : () => verificarResposta(opcao),
                       style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 20),
+                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                         side: estaSelecionado
                             ? BorderSide(
                                 color: estaCerto ? Colors.green : Colors.red,
@@ -257,7 +280,10 @@ class _BrasilMunicipiosState extends State<BrasilMunicipios> {
                       ),
                       child: Text(
                         opcao,
-                        style: const TextStyle(fontSize: 16),
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     );
                   }).toList(),
