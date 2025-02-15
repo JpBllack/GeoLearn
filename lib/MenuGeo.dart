@@ -13,7 +13,7 @@ class MenuGeo extends StatefulWidget {
 }
 
 class _MenuGeoState extends State<MenuGeo> {
-  bool _isMusicOn = false;
+  bool _isMusicOn = true;
   bool _isSoundOn = false;
 
   @override

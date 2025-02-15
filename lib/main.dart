@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:geolearn/MenuGeo.dart';
 import 'package:flutter/services.dart';
+import 'package:geolearn/audiogame.dart';
 
 // Função principal: Inicia o aplicativo
-void main() 
-{
-   WidgetsFlutterBinding.ensureInitialized();
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.landscapeLeft,
     DeviceOrientation.landscapeRight,
-  ]).then((_){
+  ]).then((_) {
+    AudioGame().playMusic();  // Garante que a música seja tocada uma vez.
     runApp(GeoLearnApp());
   });
 }
