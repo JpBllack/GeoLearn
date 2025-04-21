@@ -102,7 +102,7 @@ flutter:
     - assets/images/flagusa/ca.png
     - assets/images/flagusa/co.png
     - assets/images/flagusa/ct.png
-    - assets/images/flagusa/de.png
+    - assets/images/flagusa/de.png 
     - assets/images/flagusa/fl.png
     - assets/images/flagusa/ga.png
     - assets/images/flagusa/hi.png
@@ -131,7 +131,7 @@ flutter:
     - assets/images/flagusa/nd.png
     - assets/images/flagusa/oh.png
     - assets/images/flagusa/ok.png
-    - assets/images/flagusa/or.png
+    - assets/images/flagusa/or.png  
     - assets/images/flagusa/pa.png
     - assets/images/flagusa/ri.png
     - assets/images/flagusa/sc.png
