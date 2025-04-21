@@ -97,3 +97,5 @@ flutter:
     # Música do jogo
     - assets/songs/musica.mp3
     - assets/songs/som_botao.mp3
+    #dados dos Formatos dos Paises
+    - assets/country_shapes.geojson
