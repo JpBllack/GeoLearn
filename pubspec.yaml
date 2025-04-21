@@ -50,7 +50,7 @@ flutter:
     - assets/images/brasil.png
     - assets/images/estados-unidos.png
     - assets/images/alemanha.png
-    # Assets dos estados brasileiros
+    # Assets dos estados Brasileiros
     - assets/images/flagsbr/ac.png
     - assets/images/flagsbr/al.png
     - assets/images/flagsbr/ap.png
@@ -77,7 +77,7 @@ flutter:
     - assets/images/flagsbr/sp.png
     - assets/images/flagsbr/se.png
     - assets/images/flagsbr/to.png
-    # Assets dos estados alemães
+    # Assets dos estados Alemães
     - assets/images/flagsal/bw.png
     - assets/images/flagsal/by.png
     - assets/images/flagsal/be.png
@@ -94,6 +94,57 @@ flutter:
     - assets/images/flagsal/st.png
     - assets/images/flagsal/sh.png
     - assets/images/flagsal/th.png
+    # Assets dos estados Estadunidenses
+    - assets/images/flagusa/al.png
+    - assets/images/flagusa/ak.png
+    - assets/images/flagusa/az.png
+    - assets/images/flagusa/ar.png
+    - assets/images/flagusa/ca.png
+    - assets/images/flagusa/co.png
+    - assets/images/flagusa/ct.png
+    - assets/images/flagusa/de.png
+    - assets/images/flagusa/fl.png
+    - assets/images/flagusa/ga.png
+    - assets/images/flagusa/hi.png
+    - assets/images/flagusa/id.png
+    - assets/images/flagusa/il.png
+    - assets/images/flagusa/in.png
+    - assets/images/flagusa/ia.png
+    - assets/images/flagusa/ks.png
+    - assets/images/flagusa/ky.png
+    - assets/images/flagusa/la.png
+    - assets/images/flagusa/me.png
+    - assets/images/flagusa/md.png
+    - assets/images/flagusa/ma.png
+    - assets/images/flagusa/mi.png
+    - assets/images/flagusa/mn.png
+    - assets/images/flagusa/ms.png
+    - assets/images/flagusa/mo.png
+    - assets/images/flagusa/mt.png
+    - assets/images/flagusa/ne.png
+    - assets/images/flagusa/nv.png
+    - assets/images/flagusa/nh.png
+    - assets/images/flagusa/nj.png
+    - assets/images/flagusa/nm.png
+    - assets/images/flagusa/ny.png
+    - assets/images/flagusa/nc.png
+    - assets/images/flagusa/nd.png
+    - assets/images/flagusa/oh.png
+    - assets/images/flagusa/ok.png
+    - assets/images/flagusa/or.png
+    - assets/images/flagusa/pa.png
+    - assets/images/flagusa/ri.png
+    - assets/images/flagusa/sc.png
+    - assets/images/flagusa/sd.png
+    - assets/images/flagusa/tn.png
+    - assets/images/flagusa/tx.png
+    - assets/images/flagusa/ut.png
+    - assets/images/flagusa/vt.png
+    - assets/images/flagusa/va.png
+    - assets/images/flagusa/wa.png
+    - assets/images/flagusa/wv.png
+    - assets/images/flagusa/wi.png
+    - assets/images/flagusa/wy.png
     # Música do jogo
     - assets/songs/musica.mp3
     - assets/songs/som_botao.mp3
