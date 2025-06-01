@@ -1,38 +1,35 @@
+import 'dart:convert';
+import 'dart:math';
 import 'package:flutter/material.dart';
 
-class EstadosUnidosMunicipios extends StatelessWidget {
+class EstadosUnidosMunicipios extends StatefulWidget {
   const EstadosUnidosMunicipios({super.key});
 
   @override
-  _EstadosUnidosMunicipiosState createState() => _EstadosUnidosMunicipiosState ();
+  _EstadosUnidosMunicipiosState createState() => _EstadosUnidosMunicipiosState();
+}
+
+class _EstadosUnidosMunicipiosState extends State<EstadosUnidosMunicipios> {
+  List municipios = [];
+  List municipiosDisponiveis = [];
+  Map<String, dynamic>? municipioAtual;
+  List<String> opcoes = [];
+  String? respostaSelecionada;
+  bool? estaCorreto;
+  int acertos = 0;
+  int totalRodadas = 0;
+  static const int maxRodadas = 15;
+  String titulo = 'Adivinhe o Município pela Bandeira';
+  bool respostaConfirmada = false;
+
+  @override
+  void initState() {
+    super.initState();
+    carregarMunicipios();
   }
 
-  class _EstadosUnidosMunicipiosState extends State<EstadosUnidosMunicipios>
-  {
-    List municipios = [];
-    List municipiosDisponiveis = []
-    Map<String, dynamic>? municipioAtual;
-    List<String> opcoes=[];
-    String? respostaSelecionada;
-    bool? estaCorreto;
-    int acertos = 0;
-    int totalRodadas = 0;
-    static const int maxRodadas = 15;
-    String titulo = 'Adivinhe o Município pela Bandeira';
-    bool respostaConfirmada = false;
-
-    @override
-    void initState() 
-    {
-      super.initState();
-      carregarMunicipios();
-    }
-
-    Future<void> carregarMunicipios() async 
-    {
-    String jsonData = '''
-  [
-    {"nome": "Alabama", "bandeira": "assets/images/flagusa/al.png"},
+  Future<void> carregarMunicipios() async {
+    String jsonData = '''[{"nome": "Alabama", "bandeira": "assets/images/flagusa/al.png"},
     {"nome": "Alasca", "bandeira": "assets/images/flagusa/ak.png"},
     {"nome": "Arizona", "bandeira": "assets/images/flagusa/az.png"},
     {"nome": "Arkansas", "bandeira": "assets/images/flagusa/ar.png"},
@@ -81,52 +78,45 @@ class EstadosUnidosMunicipios extends StatelessWidget {
     {"nome": "Washington", "bandeira": "assets/images/flagusa/wa.png"},
     {"nome": "Virgínia Ocidental", "bandeira": "assets/images/flagusa/wv.png"},
     {"nome": "Wisconsin", "bandeira": "assets/images/flagusa/wi.png"},
-    {"nome": "Wyoming", "bandeira": "assets/images/flagusa/wy.png"}
-  ]
-''';
-    
+    {"nome": "Wyoming", "bandeira": "assets/images/flagusa/wy.png"}]''';
+
     final List data = json.decode(jsonData);
-    setState((){
+    setState(() {
       municipios = data;
       municipiosDisponiveis = List.from(data);
       iniciarNovaRodada();
     });
+  }
 
+  void iniciarNovaRodada() {
+    if (municipiosDisponiveis.isEmpty || totalRodadas >= maxRodadas) {
+      exibirPontuacaoFinal();
+      return;
     }
 
-    void iniciarNovaRodada()
-    {
-      if (municipiosDisponiveis.isEmpty || totalRodadas >= maxRodadas) 
-      {
-        exibirPontuacaoFinal();
-        return;
-      }
+    int index = Random().nextInt(municipiosDisponiveis.length);
+    municipioAtual = municipiosDisponiveis.removeAt(index);
+    respostaConfirmada = false;
+    respostaSelecionada = null;
+    opcoes = gerarOpcoes();
+    totalRodadas++;
 
-      setState(()
-      {
-        int index = Random().nextInt(municipiosDisponiveis.length);
-        municipioAtual = municipiosDisponiveis.removeAt(index);
-        respostaConfirmada = false;
-        respostaSelecionada = null;
-        opcoes = gerarOpcoes();
-        totalRodadas++;
-      });
+    setState(() {});
+  }
 
-      List<String> gerarOpcoes() {
+  List<String> gerarOpcoes() {
     final correto = municipioAtual?['nome'];
     final incorretos = (municipios..shuffle())
         .map((m) => m['nome'])
         .where((nome) => nome != correto)
         .take(3)
         .toList();
-
     final todasOpcoes = [correto, ...incorretos]..shuffle();
     return todasOpcoes.cast<String>();
-    }
+  }
 
-     void verificarResposta(String resposta) {
+  void verificarResposta(String resposta) {
     final estaCerta = resposta == municipioAtual?['nome'];
-
     setState(() {
       respostaSelecionada = resposta;
       estaCorreto = estaCerta;
@@ -135,11 +125,9 @@ class EstadosUnidosMunicipios extends StatelessWidget {
     });
 
     Future.delayed(const Duration(seconds: 2), () {
-      if (mounted) {
-        iniciarNovaRodada();
-      }
+      if (mounted) iniciarNovaRodada();
     });
-  }   
+  }
 
   void exibirPontuacaoFinal() {
     showDialog(
@@ -147,10 +135,7 @@ class EstadosUnidosMunicipios extends StatelessWidget {
       barrierDismissible: false,
       builder: (_) => AlertDialog(
         title: const Text('Fim do Jogo!'),
-        content: Text(
-          'Você acertou $acertos de $maxRodadas!',
-          style: const TextStyle(fontSize: 18),
-        ),
+        content: Text('Você acertou $acertos de $maxRodadas!'),
         actions: [
           TextButton(
             onPressed: () {
@@ -169,19 +154,11 @@ class EstadosUnidosMunicipios extends StatelessWidget {
     );
   }
 
-@override
+  @override
   Widget build(BuildContext context) {
     if (municipios.isEmpty || municipioAtual == null) {
       return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.blue,
-          title: Center(
-            child: Text(
-              titulo,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-            ),
-          ),
-        ),
+        appBar: AppBar(title: Text(titulo)),
         body: const Center(child: CircularProgressIndicator()),
       );
     }
@@ -190,28 +167,14 @@ class EstadosUnidosMunicipios extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
-        title: Center(
-          child: Text(
-            titulo,
-            style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 30,
-            ),
-          ),
-        ),
+        title: Text(titulo),
         actions: [
           Padding(
             padding: const EdgeInsets.all(10),
             child: Center(
               child: Text(
                 'Rodada: $totalRodadas/$maxRodadas',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),
           ),
@@ -219,81 +182,47 @@ class EstadosUnidosMunicipios extends StatelessWidget {
       ),
       body: Container(
         color: Colors.blue.shade100,
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center, 
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // Bandeira
-              Image.asset(
-                imagemBandeira,
-                width: 200,
-                height: 150,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    width: 200,
-                    height: 150,
-                    color: Colors.grey,
-                    child: const Center(
-                      child: Text('Imagem não encontrada'),
-                    ),
-                  );
-                },
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              imagemBandeira,
+              width: 200,
+              height: 150,
+              errorBuilder: (_, __, ___) => const Text('Imagem não encontrada'),
+            ),
+            const SizedBox(height: 20),
+            if (respostaConfirmada && !(estaCorreto ?? false))
+              Text(
+                'Resposta correta: ${municipioAtual?['nome']}',
+                style: const TextStyle(color: Colors.red, fontSize: 16),
               ),
-
-              // Se errou a bandeira, mostra a resposta correta
-              if (respostaConfirmada && !(estaCorreto ?? false))
-                Padding(
-                  padding: const EdgeInsets.only(top: 10),
-                  child: Text(
-                    'Resposta Correta: ${municipioAtual?['nome'] ?? ''}',
-                    style: const TextStyle(
-                      color: Colors.red,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
+            const SizedBox(height: 20),
+            Wrap(
+              spacing: 10,
+              runSpacing: 10,
+              alignment: WrapAlignment.center,
+              children: opcoes.map((opcao) {
+                final estaSelecionado = opcao == respostaSelecionada;
+                final estaCerto = opcao == municipioAtual?['nome'];
+                return ElevatedButton(
+                  onPressed: respostaConfirmada ? null : () => verificarResposta(opcao),
+                  style: ElevatedButton.styleFrom(
+                    side: estaSelecionado
+                        ? BorderSide(
+                            color: estaCerto ? Colors.green : Colors.red,
+                            width: 2,
+                          )
+                        : null,
                   ),
-                ),
-
-              const SizedBox(height: 30),
-
-              // Opções
-              Wrap(
-                alignment: WrapAlignment.center,
-                spacing: 10,
-                runSpacing: 10,
-                children: opcoes.map((opcao) {
-                  final estaSelecionado = opcao == respostaSelecionada;
-                  final estaCerto = opcao == municipioAtual?['nome'];
-
-                  return ElevatedButton(
-                    onPressed: respostaConfirmada ? null : () => verificarResposta(opcao),
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 10,
-                        horizontal: 20,
-                      ),
-                      side: estaSelecionado
-                          ? BorderSide(
-                              color: estaCerto ? Colors.green : Colors.red,
-                              width: 3,
-                            )
-                          : null,
-                    ),
-                    child: Text(
-                      opcao,
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                  );
-                }).toList(),
-              ),
-            ],
-          ),
+                  child: Text(opcao),
+                );
+              }).toList(),
+            ),
+          ],
         ),
       ),
     );
   }
 }
-
-  }
