@@ -19,7 +19,7 @@ class _EstadosUnidosMunicipiosState extends State<EstadosUnidosMunicipios> {
   int acertos = 0;
   int totalRodadas = 0;
   static const int maxRodadas = 15;
-  String titulo = 'Adivinhe o Município pela Bandeira';
+  String titulo = 'Adivinhe o Estado pela Bandeira';
   bool respostaConfirmada = false;
 
   @override
@@ -29,56 +29,36 @@ class _EstadosUnidosMunicipiosState extends State<EstadosUnidosMunicipios> {
   }
 
   Future<void> carregarMunicipios() async {
-    String jsonData = '''[{"nome": "Alabama", "bandeira": "assets/images/flagusa/al.png"},
-    {"nome": "Alasca", "bandeira": "assets/images/flagusa/ak.png"},
-    {"nome": "Arizona", "bandeira": "assets/images/flagusa/az.png"},
-    {"nome": "Arkansas", "bandeira": "assets/images/flagusa/ar.png"},
-    {"nome": "Califórnia", "bandeira": "assets/images/flagusa/ca.png"},
-    {"nome": "Colorado", "bandeira": "assets/images/flagusa/co.png"},
-    {"nome": "Connecticut", "bandeira": "assets/images/flagusa/ct.png"},
-    {"nome": "Delaware", "bandeira": "assets/images/flagusa/de.png"},
-    {"nome": "Flórida", "bandeira": "assets/images/flagusa/fl.png"},
-    {"nome": "Geórgia", "bandeira": "assets/images/flagusa/ga.png"},
-    {"nome": "Havai", "bandeira": "assets/images/flagusa/hi.png"},
-    {"nome": "Idaho", "bandeira": "assets/images/flagusa/id.png"},
-    {"nome": "Illinois", "bandeira": "assets/images/flagusa/il.png"},
-    {"nome": "Indiana", "bandeira": "assets/images/flagusa/in.png"},
-    {"nome": "Iowa", "bandeira": "assets/images/flagusa/ia.png"},
-    {"nome": "Kansas", "bandeira": "assets/images/flagusa/ks.png"},
-    {"nome": "Kentucky", "bandeira": "assets/images/flagusa/ky.png"},
-    {"nome": "Louisiana", "bandeira": "assets/images/flagusa/la.png"},
-    {"nome": "Maine", "bandeira": "assets/images/flagusa/me.png"},
-    {"nome": "Maryland", "bandeira": "assets/images/flagusa/md.png"},
-    {"nome": "Massachusetts", "bandeira": "assets/images/flagusa/ma.png"},
-    {"nome": "Michigan", "bandeira": "assets/images/flagusa/mi.png"},
-    {"nome": "Minnesota", "bandeira": "assets/images/flagusa/mn.png"},
-    {"nome": "Mississippi", "bandeira": "assets/images/flagusa/ms.png"},
-    {"nome": "Missouri", "bandeira": "assets/images/flagusa/mo.png"},
-    {"nome": "Montana", "bandeira": "assets/images/flagusa/mt.png"},
-    {"nome": "Nebraska", "bandeira": "assets/images/flagusa/ne.png"},
-    {"nome": "Nevada", "bandeira": "assets/images/flagusa/nv.png"},
-    {"nome": "New Hampshire", "bandeira": "assets/images/flagusa/nh.png"},
-    {"nome": "New Jersey", "bandeira": "assets/images/flagusa/nj.png"},
-    {"nome": "Novo México", "bandeira": "assets/images/flagusa/nm.png"},
-    {"nome": "Nova York", "bandeira": "assets/images/flagusa/ny.png"},
-    {"nome": "Carolina do Norte", "bandeira": "assets/images/flagusa/nc.png"},
-    {"nome": "Dakota do Norte", "bandeira": "assets/images/flagusa/nd.png"},
-    {"nome": "Ohio", "bandeira": "assets/images/flagusa/oh.png"},
-    {"nome": "Oklahoma", "bandeira": "assets/images/flagusa/ok.png"},
-    {"nome": "Oregon", "bandeira": "assets/images/flagusa/or.png"},
-    {"nome": "Pensilvânia", "bandeira": "assets/images/flagusa/pa.png"},
-    {"nome": "Rhode Island", "bandeira": "assets/images/flagusa/ri.png"},
-    {"nome": "Carolina do Sul", "bandeira": "assets/images/flagusa/sc.png"},
-    {"nome": "Dakota do Sul", "bandeira": "assets/images/flagusa/sd.png"},
-    {"nome": "Tennessee", "bandeira": "assets/images/flagusa/tn.png"},
-    {"nome": "Texas", "bandeira": "assets/images/flagusa/tx.png"},
-    {"nome": "Utah", "bandeira": "assets/images/flagusa/ut.png"},
-    {"nome": "Vermont", "bandeira": "assets/images/flagusa/vt.png"},
-    {"nome": "Virgínia", "bandeira": "assets/images/flagusa/va.png"},
-    {"nome": "Washington", "bandeira": "assets/images/flagusa/wa.png"},
-    {"nome": "Virgínia Ocidental", "bandeira": "assets/images/flagusa/wv.png"},
-    {"nome": "Wisconsin", "bandeira": "assets/images/flagusa/wi.png"},
-    {"nome": "Wyoming", "bandeira": "assets/images/flagusa/wy.png"}]''';
+    String jsonData = '''
+    [
+      {"nome": "Alabama", "bandeira": "assets/images/flagusa/al.png"},
+      {"nome": "Alasca", "bandeira": "assets/images/flagusa/ak.png"},
+      {"nome": "Arizona", "bandeira": "assets/images/flagusa/az.png"},
+      {"nome": "Arkansas", "bandeira": "assets/images/flagusa/ar.png"},
+      {"nome": "Califórnia", "bandeira": "assets/images/flagusa/ca.png"},
+      {"nome": "Colorado", "bandeira": "assets/images/flagusa/co.png"},
+      {"nome": "Connecticut", "bandeira": "assets/images/flagusa/ct.png"},
+      {"nome": "Delaware", "bandeira": "assets/images/flagusa/de.png"},
+      {"nome": "Flórida", "bandeira": "assets/images/flagusa/fl.png"},
+      {"nome": "Geórgia", "bandeira": "assets/images/flagusa/ga.png"},
+      {"nome": "Havaí", "bandeira": "assets/images/flagusa/hi.png"},
+      {"nome": "Idaho", "bandeira": "assets/images/flagusa/id.png"},
+      {"nome": "Illinois", "bandeira": "assets/images/flagusa/il.png"},
+      {"nome": "Indiana", "bandeira": "assets/images/flagusa/in.png"},
+      {"nome": "Iowa", "bandeira": "assets/images/flagusa/ia.png"},
+      {"nome": "Kansas", "bandeira": "assets/images/flagusa/ks.png"},
+      {"nome": "Kentucky", "bandeira": "assets/images/flagusa/ky.png"},
+      {"nome": "Louisiana", "bandeira": "assets/images/flagusa/la.png"},
+      {"nome": "Maine", "bandeira": "assets/images/flagusa/me.png"},
+      {"nome": "Maryland", "bandeira": "assets/images/flagusa/md.png"},
+      {"nome": "Massachusetts", "bandeira": "assets/images/flagusa/ma.png"},
+      {"nome": "Michigan", "bandeira": "assets/images/flagusa/mi.png"},
+      {"nome": "Minnesota", "bandeira": "assets/images/flagusa/mn.png"},
+      {"nome": "Mississippi", "bandeira": "assets/images/flagusa/ms.png"},
+      {"nome": "Missouri", "bandeira": "assets/images/flagusa/mo.png"},
+      {"nome": "Montana", "bandeira": "assets/images/flagusa/mt.png"}
+    ]
+    ''';
 
     final List data = json.decode(jsonData);
     setState(() {
@@ -94,14 +74,14 @@ class _EstadosUnidosMunicipiosState extends State<EstadosUnidosMunicipios> {
       return;
     }
 
-    int index = Random().nextInt(municipiosDisponiveis.length);
-    municipioAtual = municipiosDisponiveis.removeAt(index);
-    respostaConfirmada = false;
-    respostaSelecionada = null;
-    opcoes = gerarOpcoes();
-    totalRodadas++;
-
-    setState(() {});
+    setState(() {
+      int index = Random().nextInt(municipiosDisponiveis.length);
+      municipioAtual = municipiosDisponiveis.removeAt(index);
+      respostaConfirmada = false;
+      respostaSelecionada = null;
+      opcoes = gerarOpcoes();
+      totalRodadas++;
+    });
   }
 
   List<String> gerarOpcoes() {
@@ -111,12 +91,14 @@ class _EstadosUnidosMunicipiosState extends State<EstadosUnidosMunicipios> {
         .where((nome) => nome != correto)
         .take(3)
         .toList();
+
     final todasOpcoes = [correto, ...incorretos]..shuffle();
     return todasOpcoes.cast<String>();
   }
 
   void verificarResposta(String resposta) {
     final estaCerta = resposta == municipioAtual?['nome'];
+
     setState(() {
       respostaSelecionada = resposta;
       estaCorreto = estaCerta;
@@ -134,8 +116,17 @@ class _EstadosUnidosMunicipiosState extends State<EstadosUnidosMunicipios> {
       context: context,
       barrierDismissible: false,
       builder: (_) => AlertDialog(
-        title: const Text('Fim do Jogo!'),
-        content: Text('Você acertou $acertos de $maxRodadas!'),
+        backgroundColor: const Color(0xFF38CFFD),
+        title: const Text(
+          'Fim do Jogo!',
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+        content: Text(
+          'Você acertou $acertos de $maxRodadas!',
+          textAlign: TextAlign.center,
+          style: const TextStyle(fontSize: 18, color: Colors.white),
+        ),
         actions: [
           TextButton(
             onPressed: () {
@@ -147,7 +138,10 @@ class _EstadosUnidosMunicipiosState extends State<EstadosUnidosMunicipios> {
               });
               Navigator.of(context).pop();
             },
-            child: const Text('Jogar Novamente'),
+            child: const Text(
+              'Jogar Novamente',
+              style: TextStyle(fontSize: 30, color: Colors.white, fontWeight: FontWeight.bold),
+            ),
           ),
         ],
       ),
@@ -158,7 +152,14 @@ class _EstadosUnidosMunicipiosState extends State<EstadosUnidosMunicipios> {
   Widget build(BuildContext context) {
     if (municipios.isEmpty || municipioAtual == null) {
       return Scaffold(
-        appBar: AppBar(title: Text(titulo)),
+        appBar: AppBar(
+          backgroundColor: const Color(0xFF38CFFD),
+          centerTitle: true,
+          title: Text(
+            titulo,
+            style: const TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+        ),
         body: const Center(child: CircularProgressIndicator()),
       );
     }
@@ -167,14 +168,19 @@ class _EstadosUnidosMunicipiosState extends State<EstadosUnidosMunicipios> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(titulo),
+        backgroundColor: const Color(0xFF38CFFD),
+        centerTitle: true,
+        title: Text(
+          titulo,
+          style: const TextStyle(fontSize: 30, color: Colors.white, fontWeight: FontWeight.bold),
+        ),
         actions: [
           Padding(
             padding: const EdgeInsets.all(10),
             child: Center(
               child: Text(
                 'Rodada: $totalRodadas/$maxRodadas',
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: const TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
               ),
             ),
           ),
@@ -182,45 +188,66 @@ class _EstadosUnidosMunicipiosState extends State<EstadosUnidosMunicipios> {
       ),
       body: Container(
         color: Colors.blue.shade100,
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              imagemBandeira,
-              width: 200,
-              height: 150,
-              errorBuilder: (_, __, ___) => const Text('Imagem não encontrada'),
-            ),
-            const SizedBox(height: 20),
-            if (respostaConfirmada && !(estaCorreto ?? false))
-              Text(
-                'Resposta correta: ${municipioAtual?['nome']}',
-                style: const TextStyle(color: Colors.red, fontSize: 16),
-              ),
-            const SizedBox(height: 20),
-            Wrap(
-              spacing: 10,
-              runSpacing: 10,
-              alignment: WrapAlignment.center,
-              children: opcoes.map((opcao) {
-                final estaSelecionado = opcao == respostaSelecionada;
-                final estaCerto = opcao == municipioAtual?['nome'];
-                return ElevatedButton(
-                  onPressed: respostaConfirmada ? null : () => verificarResposta(opcao),
-                  style: ElevatedButton.styleFrom(
-                    side: estaSelecionado
-                        ? BorderSide(
-                            color: estaCerto ? Colors.green : Colors.red,
-                            width: 2,
-                          )
-                        : null,
+        child: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Image.asset(
+                  imagemBandeira,
+                  width: 200,
+                  height: 150,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      width: 200,
+                      height: 150,
+                      color: Colors.grey,
+                      child: const Center(
+                        child: Text(
+                          'Imagem não encontrada',
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                if (respostaConfirmada && !(estaCorreto ?? false))
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Text(
+                      'Resposta Correta: ${municipioAtual?['nome'] ?? ''}',
+                      style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 20),
+                    ),
                   ),
-                  child: Text(opcao),
-                );
-              }).toList(),
+                const SizedBox(height: 30),
+                Wrap(
+                  alignment: WrapAlignment.center,
+                  spacing: 10,
+                  runSpacing: 10,
+                  children: opcoes.map((opcao) {
+                    final estaSelecionado = opcao == respostaSelecionada;
+                    final estaCerto = opcao == municipioAtual?['nome'];
+
+                    return ElevatedButton(
+                      onPressed: respostaConfirmada ? null : () => verificarResposta(opcao),
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                        side: estaSelecionado
+                            ? BorderSide(color: estaCerto ? Colors.green : Colors.red, width: 3)
+                            : null,
+                      ),
+                      child: Text(
+                        opcao,
+                        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
