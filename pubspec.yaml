@@ -15,8 +15,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
-  # Ícones estilo iOS
+  flutter_map: ^6.1.0
+  latlong2: ^0.9.0
   cupertino_icons: ^1.0.8
   http: ^1.2.2
   translator: 1.0.3+1
@@ -26,21 +26,19 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-  # Recomendações de lint para boas práticas
   flutter_lints: ^5.0.0
-  flutter_launcher_icons: ^0.13.1  # ✅ Correção aqui!
+  flutter_launcher_icons: ^0.13.1
 
+# Configuração do ícone do app
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/images/app_icon.png"  # Caminho da sua imagem
+  image_path: "assets/images/app_icon.png"
 
 # Configuração específica do Flutter
 flutter:
-  uses-material-design: true # Habilita ícones padrão do Material Design
+  uses-material-design: true
 
-  # Seção de assets (imagens e outros arquivos)
   assets:
     - assets/images/terra.png
     - assets/images/mountain.png
@@ -50,7 +48,8 @@ flutter:
     - assets/images/brasil.png
     - assets/images/estados-unidos.png
     - assets/images/alemanha.png
-    # Assets dos estados Brasileiros
+
+    # Flags dos estados Brasileiros
     - assets/images/flagsbr/ac.png
     - assets/images/flagsbr/al.png
     - assets/images/flagsbr/ap.png
@@ -77,7 +76,8 @@ flutter:
     - assets/images/flagsbr/sp.png
     - assets/images/flagsbr/se.png
     - assets/images/flagsbr/to.png
-    # Assets dos estados Alemães
+
+    # Flags dos estados Alemães
     - assets/images/flagsal/bw.png
     - assets/images/flagsal/by.png
     - assets/images/flagsal/be.png
@@ -94,7 +94,8 @@ flutter:
     - assets/images/flagsal/st.png
     - assets/images/flagsal/sh.png
     - assets/images/flagsal/th.png
-    # Assets dos estados Estadunidenses
+
+    # Flags dos estados dos EUA
     - assets/images/flagusa/al.png
     - assets/images/flagusa/ak.png
     - assets/images/flagusa/az.png
@@ -145,8 +146,10 @@ flutter:
     - assets/images/flagusa/wv.png
     - assets/images/flagusa/wi.png
     - assets/images/flagusa/wy.png
-    # Música do jogo
+
+    # Músicas e sons do jogo
     - assets/songs/musica.mp3
     - assets/songs/som_botao.mp3
-    #dados dos Formatos dos Paises
+
+    # Dados dos países em formato GeoJSON
     - assets/country_shapes.geojson

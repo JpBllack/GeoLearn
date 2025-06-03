@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/services.dart' show rootBundle;
 
+import 'country_painter.dart'; // Certifique-se que CountryPainter está separado neste arquivo.
+
 class PaisesPage extends StatefulWidget {
   const PaisesPage({super.key});
 
@@ -11,7 +13,8 @@ class PaisesPage extends StatefulWidget {
 }
 
 class _PaisesPageState extends State<PaisesPage> {
-  List countries = [];
+  List<Map<String, dynamic>> countries = [];
+  List<Map<String, dynamic>> usedCountries = [];
   Map<String, dynamic>? currentCountry;
   List<String> options = [];
   String? selectedAnswer;
@@ -19,7 +22,7 @@ class _PaisesPageState extends State<PaisesPage> {
   int correctAnswers = 0;
   int totalFlags = 0;
   static const int maxFlags = 15;
-  String title = 'Adivinhe o País pelo Formato';
+  final String title = 'Adivinhe o País pela Silhueta';
   bool isAnswerSelected = false;
 
   @override
@@ -32,65 +35,66 @@ class _PaisesPageState extends State<PaisesPage> {
     try {
       String jsonString = await rootBundle.loadString('assets/country_shapes.geojson');
       final Map data = json.decode(jsonString);
+      final List allCountries = data['features'] ?? [];
 
       setState(() {
-        countries = data['features'] ?? [];
-        print("Total de países carregados: ${countries.length}");
+        countries = allCountries
+            .where((c) => c['properties']?['name'] != null)
+            .take(50)
+            .cast<Map<String, dynamic>>()
+            .toList();
+        usedCountries.clear();
+        correctAnswers = 0;
+        totalFlags = 0;
         _newRound();
       });
     } catch (e) {
-      debugPrint('Erro ao carregar o arquivo GeoJSON: $e');
+      debugPrint('Erro ao carregar o GeoJSON: $e');
     }
   }
 
   void _newRound() {
-    if (countries.isEmpty) return;
-    if (totalFlags >= maxFlags) {
+    if (countries.isEmpty || usedCountries.length >= maxFlags) {
       _showFinalScore();
       return;
     }
 
-    int attempts = 0;
-    const int maxAttempts = 10; // Evita loop infinito
-
-    while (attempts < maxAttempts) {
-      final randomIndex = Random().nextInt(countries.length);
-      currentCountry = countries[randomIndex];
-
-      if (currentCountry?['properties'] != null) {
-        String? countryName = currentCountry?['properties']?['name'];
-
-        if (countryName != null && countryName.isNotEmpty) {
-          setState(() {
-            isAnswerSelected = false;
-            selectedAnswer = null;
-            options = _generateOptions(countryName);
-            totalFlags++;
-          });
-          print("País selecionado: $countryName");
-          return;
-        }
-      }
-      attempts++;
+    final remaining = countries.where((c) => !usedCountries.contains(c)).toList();
+    if (remaining.isEmpty) {
+      _showFinalScore();
+      return;
     }
 
-    print("Erro: Nenhum país válido encontrado após $maxAttempts tentativas.");
+    final selected = remaining[Random().nextInt(remaining.length)];
+    final name = selected['properties']?['name'];
+
+    if (name != null && name.isNotEmpty) {
+      usedCountries.add(selected);
+      setState(() {
+        currentCountry = selected;
+        isAnswerSelected = false;
+        selectedAnswer = null;
+        options = _generateOptions(name);
+        totalFlags++;
+      });
+    }
   }
 
-  List<String> _generateOptions(String correctCountry) {
-    final incorrectOptions = (countries..shuffle())
-        .map((country) => country['properties']?['name'] as String?)
-        .where((name) => name != null && name != correctCountry)
+  List<String> _generateOptions(String correct) {
+    final incorrect = countries
+        .map((e) => e['properties']?['name'] as String?)
+        .where((name) => name != null && name != correct)
         .toSet()
-        .take(3)
         .toList();
 
-    final allOptions = [correctCountry, ...incorrectOptions]..shuffle();
+    final selectedIncorrect = (incorrect..shuffle()).take(3).toList();
+    final allOptions = [correct, ...selectedIncorrect]..shuffle();
     return allOptions.cast<String>();
   }
 
   void _checkAnswer(String answer) {
-    final isThisCorrect = answer == currentCountry?['properties']?['name'];
+    final correctName = currentCountry?['properties']?['name'];
+    final isThisCorrect = answer == correctName;
 
     setState(() {
       selectedAnswer = answer;
@@ -110,19 +114,12 @@ class _PaisesPageState extends State<PaisesPage> {
       barrierDismissible: false,
       builder: (_) => AlertDialog(
         title: const Text('Fim do Jogo!'),
-        content: Text(
-          'Você acertou $correctAnswers de $maxFlags países!',
-          style: const TextStyle(fontSize: 18),
-        ),
+        content: Text('Você acertou $correctAnswers de $maxFlags países!'),
         actions: [
           TextButton(
             onPressed: () {
-              setState(() {
-                correctAnswers = 0;
-                totalFlags = 0;
-                loadLocalGeoJson();
-              });
               Navigator.of(context).pop();
+              loadLocalGeoJson();
             },
             child: const Text('Jogar Novamente'),
           ),
@@ -133,61 +130,83 @@ class _PaisesPageState extends State<PaisesPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (countries.isEmpty || currentCountry == null) {
-      return Scaffold(
-        appBar: AppBar(
-          backgroundColor: const Color(0xFF38CFFD),
-          title: Center(
-            child: Text(
+    return Scaffold(
+      backgroundColor: const Color(0xFF38CFFD),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF38CFFD),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const SizedBox(width: 32),
+            Text(
               title,
               style: const TextStyle(
+                color: Colors.white,
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
               ),
             ),
-          ),
-        ),
-        body: const Center(child: CircularProgressIndicator()),
-      );
-    }
-
-    final countryName = currentCountry?['properties']?['name'] ?? 'País desconhecido';
-
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF38CFFD),
-        title: Center(
-          child: Text(
-            title,
-            style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 30,
-            ),
-          ),
-        ),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
             Text(
-              'Formato do País: $countryName',
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 30),
-            Wrap(
-              spacing: 10,
-              children: options.map((option) {
-                return ElevatedButton(
-                  onPressed: !isAnswerSelected ? () => _checkAnswer(option) : null,
-                  child: Text(option),
-                );
-              }).toList(),
-            ),
+              '${totalFlags.toString().padLeft(2, '0')}/$maxFlags',
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+              ),
+            )
           ],
         ),
       ),
+      body: countries.isEmpty || currentCountry == null
+          ? const Center(child: CircularProgressIndicator())
+          : Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Container(
+                  height: 280,
+                  padding: const EdgeInsets.all(12),
+                  child: CustomPaint(
+                    painter: CountryPainter(currentCountry?['geometry'] ?? {}),
+                    child: Container(),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Wrap(
+                  spacing: 12,
+                  runSpacing: 12,
+                  alignment: WrapAlignment.center,
+                  children: options.map((option) {
+                    final isSelected = option == selectedAnswer;
+                    final correct = currentCountry?['properties']?['name'];
+                    final isCorrectAnswer = isAnswerSelected && option == correct;
+                    final isWrongSelected = isAnswerSelected && isSelected && !isCorrectAnswer;
+
+                    return Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: isCorrectAnswer
+                              ? Colors.green
+                              : (isWrongSelected ? Colors.red : Colors.transparent),
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: ElevatedButton(
+                        onPressed: !isAnswerSelected ? () => _checkAnswer(option) : null,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: isCorrectAnswer
+                              ? Colors.green
+                              : isWrongSelected
+                                  ? Colors.red
+                                  : null,
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                        ),
+                        child: Text(option),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ],
+            ),
     );
   }
 }
