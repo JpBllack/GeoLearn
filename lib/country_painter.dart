@@ -26,7 +26,11 @@ class CountryPainter extends CustomPainter {
       for (var ring in coordinates) {
         for (var point in ring) {
           if (point is List && point.length >= 2) {
-            allPoints.add(List<double>.from(point));
+            allPoints.add([
+  (point[0] as num).toDouble(),
+  (point[1] as num).toDouble(),
+]);
+
           }
         }
       }
@@ -35,7 +39,10 @@ class CountryPainter extends CustomPainter {
         for (var ring in polygon) {
           for (var point in ring) {
             if (point is List && point.length >= 2) {
-              allPoints.add(List<double>.from(point));
+              allPoints.add([
+             (point[0] as num).toDouble(),
+             (point[1] as num).toDouble(),
+              ]);
             }
           }
         }
@@ -70,7 +77,11 @@ class CountryPainter extends CustomPainter {
 
     void drawPolygon(List ring) {
       for (int i = 0; i < ring.length; i++) {
-        final point = geoToPoint(List<double>.from(ring[i]));
+        final raw = ring[i];
+        final point = geoToPoint([
+        (raw[0] as num).toDouble(),
+        (raw[1] as num).toDouble(),
+          ]);
         if (i == 0) {
           path.moveTo(point.dx, point.dy);
         } else {

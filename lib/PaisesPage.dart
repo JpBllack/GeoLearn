@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/services.dart' show rootBundle;
 
-import 'country_painter.dart'; // Certifique-se que CountryPainter está separado neste arquivo.
+import 'country_painter.dart';
 
 class PaisesPage extends StatefulWidget {
   const PaisesPage({super.key});
@@ -24,6 +24,207 @@ class _PaisesPageState extends State<PaisesPage> {
   static const int maxFlags = 15;
   final String title = 'Adivinhe o País pela Silhueta';
   bool isAnswerSelected = false;
+final Map<String, String> countryTranslations = {
+  // América do Norte
+  'United States': 'Estados Unidos',
+  'Canada': 'Canadá',
+  'Mexico': 'México',
+  'Guatemala': 'Guatemala',
+  'Belize': 'Belize',
+  'El Salvador': 'El Salvador',
+  'Honduras': 'Honduras',
+  'Nicaragua': 'Nicarágua',
+  'Costa Rica': 'Costa Rica',
+  'Panama': 'Panamá',
+
+  // América do Sul
+  'Brazil': 'Brasil',
+  'Argentina': 'Argentina',
+  'Colombia': 'Colômbia',
+  'Venezuela': 'Venezuela',
+  'Peru': 'Peru',
+  'Chile': 'Chile',
+  'Ecuador': 'Equador',
+  'Bolivia': 'Bolívia',
+  'Paraguay': 'Paraguai',
+  'Uruguay': 'Uruguai',
+  'Guyana': 'Guiana',
+  'Suriname': 'Suriname',
+  'French Guiana': 'Guiana Francesa',
+
+  // Europa
+  'Albania': 'Albânia',
+  'Andorra': 'Andorra',
+  'Austria': 'Áustria',
+  'Belarus': 'Bielorrússia',
+  'Belgium': 'Bélgica',
+  'Bosnia and Herzegovina': 'Bósnia e Herzegovina',
+  'Bulgaria': 'Bulgária',
+  'Croatia': 'Croácia',
+  'Czech Republic': 'República Tcheca',
+  'Denmark': 'Dinamarca',
+  'Estonia': 'Estônia',
+  'Finland': 'Finlândia',
+  'France': 'França',
+  'Germany': 'Alemanha',
+  'Greece': 'Grécia',
+  'Hungary': 'Hungria',
+  'Iceland': 'Islândia',
+  'Ireland': 'Irlanda',
+  'Italy': 'Itália',
+  'Latvia': 'Letônia',
+  'Liechtenstein': 'Liechtenstein',
+  'Lithuania': 'Lituânia',
+  'Luxembourg': 'Luxemburgo',
+  'Malta': 'Malta',
+  'Moldova': 'Moldávia',
+  'Monaco': 'Mônaco',
+  'Montenegro': 'Montenegro',
+  'Netherlands': 'Países Baixos',
+  'North Macedonia': 'Macedônia do Norte',
+  'Norway': 'Noruega',
+  'Poland': 'Polônia',
+  'Portugal': 'Portugal',
+  'Romania': 'Romênia',
+  'Russia': 'Rússia',
+  'San Marino': 'San Marino',
+  'Serbia': 'Sérvia',
+  'Slovakia': 'Eslováquia',
+  'Slovenia': 'Eslovênia',
+  'Spain': 'Espanha',
+  'Sweden': 'Suécia',
+  'Switzerland': 'Suíça',
+  'Ukraine': 'Ucrânia',
+  'United Kingdom': 'Reino Unido',
+  'Vatican City': 'Vaticano',
+
+  // África
+  'Algeria': 'Argélia',
+  'Angola': 'Angola',
+  'Benin': 'Benim',
+  'Botswana': 'Botsuana',
+  'Burkina Faso': 'Burkina Faso',
+  'Burundi': 'Burundi',
+  'Cabo Verde': 'Cabo Verde',
+  'Cameroon': 'Camarões',
+  'Central African Republic': 'República Centro-Africana',
+  'Chad': 'Chade',
+  'Comoros': 'Comores',
+  'Democratic Republic of the Congo': 'República Democrática do Congo',
+  'Djibouti': 'Djibuti',
+  'Egypt': 'Egito',
+  'Equatorial Guinea': 'Guiné Equatorial',
+  'Eritrea': 'Eritreia',
+  'Eswatini': 'Eswatini',
+  'Ethiopia': 'Etiópia',
+  'Gabon': 'Gabão',
+  'Gambia': 'Gâmbia',
+  'Ghana': 'Gana',
+  'Guinea': 'Guiné',
+  'Guinea-Bissau': 'Guiné-Bissau',
+  'Ivory Coast': 'Costa do Marfim',
+  'Kenya': 'Quênia',
+  'Lesotho': 'Lesoto',
+  'Liberia': 'Libéria',
+  'Libya': 'Líbia',
+  'Madagascar': 'Madagáscar',
+  'Malawi': 'Malawi',
+  'Mali': 'Mali',
+  'Mauritania': 'Mauritânia',
+  'Mauritius': 'Maurício',
+  'Morocco': 'Marrocos',
+  'Mozambique': 'Moçambique',
+  'Namibia': 'Namíbia',
+  'Niger': 'Níger',
+  'Nigeria': 'Nigéria',
+  'Republic of the Congo': 'República do Congo',
+  'Rwanda': 'Ruanda',
+  'Sao Tome and Principe': 'São Tomé e Príncipe',
+  'Senegal': 'Senegal',
+  'Seychelles': 'Seicheles',
+  'Sierra Leone': 'Serra Leoa',
+  'Somalia': 'Somália',
+  'South Africa': 'África do Sul',
+  'South Sudan': 'Sudão do Sul',
+  'Sudan': 'Sudão',
+  'Tanzania': 'Tanzânia',
+  'Togo': 'Togo',
+  'Tunisia': 'Tunísia',
+  'Uganda': 'Uganda',
+  'Zambia': 'Zâmbia',
+  'Zimbabwe': 'Zimbábue',
+
+  // Ásia
+  'Afghanistan': 'Afeganistão',
+  'Armenia': 'Armênia',
+  'Azerbaijan': 'Azerbaijão',
+  'Bahrain': 'Bahrein',
+  'Bangladesh': 'Bangladesh',
+  'Bhutan': 'Butão',
+  'Brunei': 'Brunei',
+  'Cambodia': 'Camboja',
+  'China': 'China',
+  'Cyprus': 'Chipre',
+  'Georgia': 'Geórgia',
+  'India': 'Índia',
+  'Indonesia': 'Indonésia',
+  'Iran': 'Irã',
+  'Iraq': 'Iraque',
+  'Israel': 'Israel',
+  'Japan': 'Japão',
+  'Jordan': 'Jordânia',
+  'Kazakhstan': 'Cazaquistão',
+  'Kuwait': 'Kuwait',
+  'Kyrgyzstan': 'Quirguistão',
+  'Laos': 'Laos',
+  'Lebanon': 'Líbano',
+  'Malaysia': 'Malásia',
+  'Maldives': 'Maldivas',
+  'Mongolia': 'Mongólia',
+  'Myanmar': 'Mianmar',
+  'Nepal': 'Nepal',
+  'North Korea': 'Coreia do Norte',
+  'Oman': 'Omã',
+  'Pakistan': 'Paquistão',
+  'Palestine': 'Palestina',
+  'Philippines': 'Filipinas',
+  'Qatar': 'Catar',
+  'Saudi Arabia': 'Arábia Saudita',
+  'Singapore': 'Singapura',
+  'South Korea': 'Coreia do Sul',
+  'Sri Lanka': 'Sri Lanka',
+  'Syria': 'Síria',
+  'Taiwan': 'Taiwan',
+  'Tajikistan': 'Tajiquistão',
+  'Thailand': 'Tailândia',
+  'Timor-Leste': 'Timor-Leste',
+  'Turkey': 'Turquia',
+  'Turkmenistan': 'Turcomenistão',
+  'United Arab Emirates': 'Emirados Árabes Unidos',
+  'Uzbekistan': 'Uzbequistão',
+  'Vietnam': 'Vietnã',
+  'Yemen': 'Iêmen',
+
+  // Oceania
+  'Australia': 'Austrália',
+  'Fiji': 'Fiji',
+  'Kiribati': 'Kiribati',
+  'Marshall Islands': 'Ilhas Marshall',
+  'Micronesia': 'Micronésia',
+  'Nauru': 'Nauru',
+  'New Zealand': 'Nova Zelândia',
+  'Palau': 'Palau',
+  'Papua New Guinea': 'Papua Nova Guiné',
+  'Samoa': 'Samoa',
+  'Solomon Islands': 'Ilhas Salomão',
+  'Tonga': 'Tonga',
+  'Tuvalu': 'Tuvalu',
+  'Vanuatu': 'Vanuatu',
+};
+
+
+
+  String displayName(String name) => countryTranslations[name] ?? name;
 
   @override
   void initState() {
@@ -60,11 +261,6 @@ class _PaisesPageState extends State<PaisesPage> {
     }
 
     final remaining = countries.where((c) => !usedCountries.contains(c)).toList();
-    if (remaining.isEmpty) {
-      _showFinalScore();
-      return;
-    }
-
     final selected = remaining[Random().nextInt(remaining.length)];
     final name = selected['properties']?['name'];
 
@@ -92,12 +288,13 @@ class _PaisesPageState extends State<PaisesPage> {
     return allOptions.cast<String>();
   }
 
-  void _checkAnswer(String answer) {
+  void _checkAnswer(String translatedAnswer) {
     final correctName = currentCountry?['properties']?['name'];
-    final isThisCorrect = answer == correctName;
+    final translatedCorrect = displayName(correctName ?? '');
+    final isThisCorrect = translatedAnswer == translatedCorrect;
 
     setState(() {
-      selectedAnswer = answer;
+      selectedAnswer = translatedAnswer;
       isCorrect = isThisCorrect;
       isAnswerSelected = true;
       if (isThisCorrect) correctAnswers++;
@@ -175,9 +372,10 @@ class _PaisesPageState extends State<PaisesPage> {
                   runSpacing: 12,
                   alignment: WrapAlignment.center,
                   children: options.map((option) {
-                    final isSelected = option == selectedAnswer;
-                    final correct = currentCountry?['properties']?['name'];
-                    final isCorrectAnswer = isAnswerSelected && option == correct;
+                    final translatedOption = displayName(option);
+                    final correctTranslated = displayName(currentCountry?['properties']?['name'] ?? '');
+                    final isSelected = translatedOption == selectedAnswer;
+                    final isCorrectAnswer = isAnswerSelected && translatedOption == correctTranslated;
                     final isWrongSelected = isAnswerSelected && isSelected && !isCorrectAnswer;
 
                     return Container(
@@ -191,7 +389,7 @@ class _PaisesPageState extends State<PaisesPage> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: ElevatedButton(
-                        onPressed: !isAnswerSelected ? () => _checkAnswer(option) : null,
+                        onPressed: !isAnswerSelected ? () => _checkAnswer(translatedOption) : null,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: isCorrectAnswer
                               ? Colors.green
@@ -200,7 +398,7 @@ class _PaisesPageState extends State<PaisesPage> {
                                   : null,
                           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                         ),
-                        child: Text(option),
+                        child: Text(translatedOption),
                       ),
                     );
                   }).toList(),
