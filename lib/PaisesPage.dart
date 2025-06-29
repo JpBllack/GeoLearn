@@ -14,7 +14,7 @@ class PaisesPage extends StatefulWidget {
 
 class _PaisesPageState extends State<PaisesPage> {
   List<Map<String, dynamic>> countries = [];
-  List<Map<String, dynamic>> usedCountries = [];
+  List<String> usedCountryNames = [];
   Map<String, dynamic>? currentCountry;
   List<String> options = [];
   String? selectedAnswer;
@@ -24,205 +24,205 @@ class _PaisesPageState extends State<PaisesPage> {
   static const int maxFlags = 15;
   final String title = 'Adivinhe o País pela Silhueta';
   bool isAnswerSelected = false;
-final Map<String, String> countryTranslations = {
-  // América do Norte
-  'United States': 'Estados Unidos',
-  'Canada': 'Canadá',
-  'Mexico': 'México',
-  'Guatemala': 'Guatemala',
-  'Belize': 'Belize',
-  'El Salvador': 'El Salvador',
-  'Honduras': 'Honduras',
-  'Nicaragua': 'Nicarágua',
-  'Costa Rica': 'Costa Rica',
-  'Panama': 'Panamá',
 
-  // América do Sul
-  'Brazil': 'Brasil',
-  'Argentina': 'Argentina',
-  'Colombia': 'Colômbia',
-  'Venezuela': 'Venezuela',
-  'Peru': 'Peru',
-  'Chile': 'Chile',
-  'Ecuador': 'Equador',
-  'Bolivia': 'Bolívia',
-  'Paraguay': 'Paraguai',
-  'Uruguay': 'Uruguai',
-  'Guyana': 'Guiana',
-  'Suriname': 'Suriname',
-  'French Guiana': 'Guiana Francesa',
+  final Map<String, String> countryTranslations = {
+    // América do Norte
+    'United States Of America': 'Estados Unidos',
+    'United States of America': 'Estados Unidos',
+    'Canada': 'Canadá',
+    'Mexico': 'México',
+    'Guatemala': 'Guatemala',
+    'Belize': 'Belize',
+    'El Salvador': 'El Salvador',
+    'Honduras': 'Honduras',
+    'Nicaragua': 'Nicarágua',
+    'Costa Rica': 'Costa Rica',
+    'Panama': 'Panamá',
 
-  // Europa
-  'Albania': 'Albânia',
-  'Andorra': 'Andorra',
-  'Austria': 'Áustria',
-  'Belarus': 'Bielorrússia',
-  'Belgium': 'Bélgica',
-  'Bosnia and Herzegovina': 'Bósnia e Herzegovina',
-  'Bulgaria': 'Bulgária',
-  'Croatia': 'Croácia',
-  'Czech Republic': 'República Tcheca',
-  'Denmark': 'Dinamarca',
-  'Estonia': 'Estônia',
-  'Finland': 'Finlândia',
-  'France': 'França',
-  'Germany': 'Alemanha',
-  'Greece': 'Grécia',
-  'Hungary': 'Hungria',
-  'Iceland': 'Islândia',
-  'Ireland': 'Irlanda',
-  'Italy': 'Itália',
-  'Latvia': 'Letônia',
-  'Liechtenstein': 'Liechtenstein',
-  'Lithuania': 'Lituânia',
-  'Luxembourg': 'Luxemburgo',
-  'Malta': 'Malta',
-  'Moldova': 'Moldávia',
-  'Monaco': 'Mônaco',
-  'Montenegro': 'Montenegro',
-  'Netherlands': 'Países Baixos',
-  'North Macedonia': 'Macedônia do Norte',
-  'Norway': 'Noruega',
-  'Poland': 'Polônia',
-  'Portugal': 'Portugal',
-  'Romania': 'Romênia',
-  'Russia': 'Rússia',
-  'San Marino': 'San Marino',
-  'Serbia': 'Sérvia',
-  'Slovakia': 'Eslováquia',
-  'Slovenia': 'Eslovênia',
-  'Spain': 'Espanha',
-  'Sweden': 'Suécia',
-  'Switzerland': 'Suíça',
-  'Ukraine': 'Ucrânia',
-  'United Kingdom': 'Reino Unido',
-  'Vatican City': 'Vaticano',
+    // América do Sul
+    'Brazil': 'Brasil',
+    'Argentina': 'Argentina',
+    'Colombia': 'Colômbia',
+    'Venezuela': 'Venezuela',
+    'Peru': 'Peru',
+    'Chile': 'Chile',
+    'Ecuador': 'Equador',
+    'Bolivia': 'Bolívia',
+    'Paraguay': 'Paraguai',
+    'Uruguay': 'Uruguai',
+    'Guyana': 'Guiana',
+    'Suriname': 'Suriname',
+    'French Guiana': 'Guiana Francesa',
 
-  // África
-  'Algeria': 'Argélia',
-  'Angola': 'Angola',
-  'Benin': 'Benim',
-  'Botswana': 'Botsuana',
-  'Burkina Faso': 'Burkina Faso',
-  'Burundi': 'Burundi',
-  'Cabo Verde': 'Cabo Verde',
-  'Cameroon': 'Camarões',
-  'Central African Republic': 'República Centro-Africana',
-  'Chad': 'Chade',
-  'Comoros': 'Comores',
-  'Democratic Republic of the Congo': 'República Democrática do Congo',
-  'Djibouti': 'Djibuti',
-  'Egypt': 'Egito',
-  'Equatorial Guinea': 'Guiné Equatorial',
-  'Eritrea': 'Eritreia',
-  'Eswatini': 'Eswatini',
-  'Ethiopia': 'Etiópia',
-  'Gabon': 'Gabão',
-  'Gambia': 'Gâmbia',
-  'Ghana': 'Gana',
-  'Guinea': 'Guiné',
-  'Guinea-Bissau': 'Guiné-Bissau',
-  'Ivory Coast': 'Costa do Marfim',
-  'Kenya': 'Quênia',
-  'Lesotho': 'Lesoto',
-  'Liberia': 'Libéria',
-  'Libya': 'Líbia',
-  'Madagascar': 'Madagáscar',
-  'Malawi': 'Malawi',
-  'Mali': 'Mali',
-  'Mauritania': 'Mauritânia',
-  'Mauritius': 'Maurício',
-  'Morocco': 'Marrocos',
-  'Mozambique': 'Moçambique',
-  'Namibia': 'Namíbia',
-  'Niger': 'Níger',
-  'Nigeria': 'Nigéria',
-  'Republic of the Congo': 'República do Congo',
-  'Rwanda': 'Ruanda',
-  'Sao Tome and Principe': 'São Tomé e Príncipe',
-  'Senegal': 'Senegal',
-  'Seychelles': 'Seicheles',
-  'Sierra Leone': 'Serra Leoa',
-  'Somalia': 'Somália',
-  'South Africa': 'África do Sul',
-  'South Sudan': 'Sudão do Sul',
-  'Sudan': 'Sudão',
-  'Tanzania': 'Tanzânia',
-  'Togo': 'Togo',
-  'Tunisia': 'Tunísia',
-  'Uganda': 'Uganda',
-  'Zambia': 'Zâmbia',
-  'Zimbabwe': 'Zimbábue',
+    // Europa
+    'Albania': 'Albânia',
+    'Andorra': 'Andorra',
+    'Austria': 'Áustria',
+    'Belarus': 'Bielorrússia',
+    'Belgium': 'Bélgica',
+    'Bosnia and Herzegovina': 'Bósnia e Herzegovina',
+    'Bulgaria': 'Bulgária',
+    'Croatia': 'Croácia',
+    'Czech Republic': 'República Tcheca',
+    'Denmark': 'Dinamarca',
+    'Estonia': 'Estônia',
+    'Finland': 'Finlândia',
+    'France': 'França',
+    'Germany': 'Alemanha',
+    'Greece': 'Grécia',
+    'Hungary': 'Hungria',
+    'Iceland': 'Islândia',
+    'Ireland': 'Irlanda',
+    'Italy': 'Itália',
+    'Latvia': 'Letônia',
+    'Liechtenstein': 'Liechtenstein',
+    'Lithuania': 'Lituânia',
+    'Luxembourg': 'Luxemburgo',
+    'Malta': 'Malta',
+    'Moldova': 'Moldávia',
+    'Monaco': 'Mônaco',
+    'Montenegro': 'Montenegro',
+    'Netherlands': 'Países Baixos',
+    'North Macedonia': 'Macedônia do Norte',
+    'Norway': 'Noruega',
+    'Poland': 'Polônia',
+    'Portugal': 'Portugal',
+    'Romania': 'Romênia',
+    'Russia': 'Rússia',
+    'San Marino': 'San Marino',
+    'Serbia': 'Sérvia',
+    'Slovakia': 'Eslováquia',
+    'Slovenia': 'Eslovênia',
+    'Spain': 'Espanha',
+    'Sweden': 'Suécia',
+    'Switzerland': 'Suíça',
+    'Ukraine': 'Ucrânia',
+    'United Kingdom': 'Reino Unido',
+    'Vatican City': 'Vaticano',
 
-  // Ásia
-  'Afghanistan': 'Afeganistão',
-  'Armenia': 'Armênia',
-  'Azerbaijan': 'Azerbaijão',
-  'Bahrain': 'Bahrein',
-  'Bangladesh': 'Bangladesh',
-  'Bhutan': 'Butão',
-  'Brunei': 'Brunei',
-  'Cambodia': 'Camboja',
-  'China': 'China',
-  'Cyprus': 'Chipre',
-  'Georgia': 'Geórgia',
-  'India': 'Índia',
-  'Indonesia': 'Indonésia',
-  'Iran': 'Irã',
-  'Iraq': 'Iraque',
-  'Israel': 'Israel',
-  'Japan': 'Japão',
-  'Jordan': 'Jordânia',
-  'Kazakhstan': 'Cazaquistão',
-  'Kuwait': 'Kuwait',
-  'Kyrgyzstan': 'Quirguistão',
-  'Laos': 'Laos',
-  'Lebanon': 'Líbano',
-  'Malaysia': 'Malásia',
-  'Maldives': 'Maldivas',
-  'Mongolia': 'Mongólia',
-  'Myanmar': 'Mianmar',
-  'Nepal': 'Nepal',
-  'North Korea': 'Coreia do Norte',
-  'Oman': 'Omã',
-  'Pakistan': 'Paquistão',
-  'Palestine': 'Palestina',
-  'Philippines': 'Filipinas',
-  'Qatar': 'Catar',
-  'Saudi Arabia': 'Arábia Saudita',
-  'Singapore': 'Singapura',
-  'South Korea': 'Coreia do Sul',
-  'Sri Lanka': 'Sri Lanka',
-  'Syria': 'Síria',
-  'Taiwan': 'Taiwan',
-  'Tajikistan': 'Tajiquistão',
-  'Thailand': 'Tailândia',
-  'Timor-Leste': 'Timor-Leste',
-  'Turkey': 'Turquia',
-  'Turkmenistan': 'Turcomenistão',
-  'United Arab Emirates': 'Emirados Árabes Unidos',
-  'Uzbekistan': 'Uzbequistão',
-  'Vietnam': 'Vietnã',
-  'Yemen': 'Iêmen',
+    // África
+    'Algeria': 'Argélia',
+    'Angola': 'Angola',
+    'Benin': 'Benim',
+    'Botswana': 'Botsuana',
+    'Burkina Faso': 'Burkina Faso',
+    'Burundi': 'Burundi',
+    'Cabo Verde': 'Cabo Verde',
+    'Cameroon': 'Camarões',
+    'Central African Republic': 'República Centro-Africana',
+    'Chad': 'Chade',
+    'Comoros': 'Comores',
+    'Democratic Republic of the Congo': 'República Democrática do Congo',
+    'Djibouti': 'Djibuti',
+    'Egypt': 'Egito',
+    'Equatorial Guinea': 'Guiné Equatorial',
+    'Eritrea': 'Eritreia',
+    'Eswatini': 'Eswatini',
+    'Ethiopia': 'Etiópia',
+    'Gabon': 'Gabão',
+    'Gambia': 'Gâmbia',
+    'Ghana': 'Gana',
+    'Guinea': 'Guiné',
+    'Guinea-Bissau': 'Guiné-Bissau',
+    'Ivory Coast': 'Costa do Marfim',
+    'Kenya': 'Quênia',
+    'Lesotho': 'Lesoto',
+    'Liberia': 'Libéria',
+    'Libya': 'Líbia',
+    'Madagascar': 'Madagáscar',
+    'Malawi': 'Malawi',
+    'Mali': 'Mali',
+    'Mauritania': 'Mauritânia',
+    'Mauritius': 'Maurício',
+    'Morocco': 'Marrocos',
+    'Mozambique': 'Moçambique',
+    'Namibia': 'Namíbia',
+    'Niger': 'Níger',
+    'Nigeria': 'Nigéria',
+    'Republic of the Congo': 'República do Congo',
+    'Rwanda': 'Ruanda',
+    'Sao Tome and Principe': 'São Tomé e Príncipe',
+    'Senegal': 'Senegal',
+    'Seychelles': 'Seicheles',
+    'Sierra Leone': 'Serra Leoa',
+    'Somalia': 'Somália',
+    'South Africa': 'África do Sul',
+    'South Sudan': 'Sudão do Sul',
+    'Sudan': 'Sudão',
+    'Tanzania': 'Tanzânia',
+    'Togo': 'Togo',
+    'Tunisia': 'Tunísia',
+    'Uganda': 'Uganda',
+    'Zambia': 'Zâmbia',
+    'Zimbabwe': 'Zimbábue',
 
-  // Oceania
-  'Australia': 'Austrália',
-  'Fiji': 'Fiji',
-  'Kiribati': 'Kiribati',
-  'Marshall Islands': 'Ilhas Marshall',
-  'Micronesia': 'Micronésia',
-  'Nauru': 'Nauru',
-  'New Zealand': 'Nova Zelândia',
-  'Palau': 'Palau',
-  'Papua New Guinea': 'Papua Nova Guiné',
-  'Samoa': 'Samoa',
-  'Solomon Islands': 'Ilhas Salomão',
-  'Tonga': 'Tonga',
-  'Tuvalu': 'Tuvalu',
-  'Vanuatu': 'Vanuatu',
-};
+    // Ásia
+    'Afghanistan': 'Afeganistão',
+    'Armenia': 'Armênia',
+    'Azerbaijan': 'Azerbaijão',
+    'Bahrain': 'Bahrein',
+    'Bangladesh': 'Bangladesh',
+    'Bhutan': 'Butão',
+    'Brunei': 'Brunei',
+    'Cambodia': 'Camboja',
+    'China': 'China',
+    'Cyprus': 'Chipre',
+    'Georgia': 'Geórgia',
+    'India': 'Índia',
+    'Indonesia': 'Indonésia',
+    'Iran': 'Irã',
+    'Iraq': 'Iraque',
+    'Israel': 'Israel',
+    'Japan': 'Japão',
+    'Jordan': 'Jordânia',
+    'Kazakhstan': 'Cazaquistão',
+    'Kuwait': 'Kuwait',
+    'Kyrgyzstan': 'Quirguistão',
+    'Laos': 'Laos',
+    'Lebanon': 'Líbano',
+    'Malaysia': 'Malásia',
+    'Maldives': 'Maldivas',
+    'Mongolia': 'Mongólia',
+    'Myanmar': 'Mianmar',
+    'Nepal': 'Nepal',
+    'North Korea': 'Coreia do Norte',
+    'Oman': 'Omã',
+    'Pakistan': 'Paquistão',
+    'Palestine': 'Palestina',
+    'Philippines': 'Filipinas',
+    'Qatar': 'Catar',
+    'Saudi Arabia': 'Arábia Saudita',
+    'Singapore': 'Singapura',
+    'South Korea': 'Coreia do Sul',
+    'Sri Lanka': 'Sri Lanka',
+    'Syria': 'Síria',
+    'Taiwan': 'Taiwan',
+    'Tajikistan': 'Tajiquistão',
+    'Thailand': 'Tailândia',
+    'Timor-Leste': 'Timor-Leste',
+    'Turkey': 'Turquia',
+    'Turkmenistan': 'Turcomenistão',
+    'United Arab Emirates': 'Emirados Árabes Unidos',
+    'Uzbekistan': 'Uzbequistão',
+    'Vietnam': 'Vietnã',
+    'Yemen': 'Iêmen',
 
-
+    // Oceania
+    'Australia': 'Austrália',
+    'Fiji': 'Fiji',
+    'Kiribati': 'Kiribati',
+    'Marshall Islands': 'Ilhas Marshall',
+    'Micronesia': 'Micronésia',
+    'Nauru': 'Nauru',
+    'New Zealand': 'Nova Zelândia',
+    'Palau': 'Palau',
+    'Papua New Guinea': 'Papua Nova Guiné',
+    'Samoa': 'Samoa',
+    'Solomon Islands': 'Ilhas Salomão',
+    'Tonga': 'Tonga',
+    'Tuvalu': 'Tuvalu',
+    'Vanuatu': 'Vanuatu',
+  };
 
   String displayName(String name) => countryTranslations[name] ?? name;
 
@@ -241,10 +241,10 @@ final Map<String, String> countryTranslations = {
       setState(() {
         countries = allCountries
             .where((c) => c['properties']?['name'] != null)
-            .take(50)
+            //.take(50) // Você pode tirar o take para pegar todos
             .cast<Map<String, dynamic>>()
             .toList();
-        usedCountries.clear();
+        usedCountryNames.clear();
         correctAnswers = 0;
         totalFlags = 0;
         _newRound();
@@ -255,17 +255,23 @@ final Map<String, String> countryTranslations = {
   }
 
   void _newRound() {
-    if (countries.isEmpty || usedCountries.length >= maxFlags) {
+    if (countries.isEmpty || usedCountryNames.length >= maxFlags) {
       _showFinalScore();
       return;
     }
 
-    final remaining = countries.where((c) => !usedCountries.contains(c)).toList();
+    final remaining = countries.where((c) => !usedCountryNames.contains(c['properties']?['name'])).toList();
+
+    if (remaining.isEmpty) {
+      _showFinalScore();
+      return;
+    }
+
     final selected = remaining[Random().nextInt(remaining.length)];
     final name = selected['properties']?['name'];
 
     if (name != null && name.isNotEmpty) {
-      usedCountries.add(selected);
+      usedCountryNames.add(name);
       setState(() {
         currentCountry = selected;
         isAnswerSelected = false;
@@ -285,7 +291,9 @@ final Map<String, String> countryTranslations = {
 
     final selectedIncorrect = (incorrect..shuffle()).take(3).toList();
     final allOptions = [correct, ...selectedIncorrect]..shuffle();
-    return allOptions.cast<String>();
+
+    // Traduzir os nomes das opções
+    return allOptions.map((name) => displayName(name ?? '')).toList();
   }
 
   void _checkAnswer(String translatedAnswer) {
@@ -353,58 +361,59 @@ final Map<String, String> countryTranslations = {
           ],
         ),
       ),
-      body: countries.isEmpty || currentCountry == null
-          ? const Center(child: CircularProgressIndicator())
-          : Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Container(
-                  height: 280,
-                  padding: const EdgeInsets.all(12),
-                  child: CustomPaint(
-                    painter: CountryPainter(currentCountry?['geometry'] ?? {}),
-                    child: Container(),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Wrap(
-                  spacing: 12,
-                  runSpacing: 12,
-                  alignment: WrapAlignment.center,
-                  children: options.map((option) {
-                    final translatedOption = displayName(option);
-                    final correctTranslated = displayName(currentCountry?['properties']?['name'] ?? '');
-                    final isSelected = translatedOption == selectedAnswer;
-                    final isCorrectAnswer = isAnswerSelected && translatedOption == correctTranslated;
-                    final isWrongSelected = isAnswerSelected && isSelected && !isCorrectAnswer;
-
-                    return Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: isCorrectAnswer
-                              ? Colors.green
-                              : (isWrongSelected ? Colors.red : Colors.transparent),
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: ElevatedButton(
-                        onPressed: !isAnswerSelected ? () => _checkAnswer(translatedOption) : null,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: isCorrectAnswer
-                              ? Colors.green
-                              : isWrongSelected
-                                  ? Colors.red
-                                  : null,
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                        ),
-                        child: Text(translatedOption),
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ],
+     body: countries.isEmpty || currentCountry == null
+    ? const Center(child: CircularProgressIndicator())
+    : Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              height: 280,
+              padding: const EdgeInsets.all(12),
+              child: CustomPaint(
+                painter: CountryPainter(currentCountry?['geometry'] ?? {}),
+                child: Container(),
+              ),
             ),
+            const SizedBox(height: 20),
+            Wrap(
+              spacing: 12,
+              runSpacing: 12,
+              alignment: WrapAlignment.center,
+              children: options.map((option) {
+                final isSelected = option == selectedAnswer;
+                final correctTranslated = displayName(currentCountry?['properties']?['name'] ?? '');
+                final isCorrectAnswer = isAnswerSelected && option == correctTranslated;
+                final isWrongSelected = isAnswerSelected && isSelected && !isCorrectAnswer;
+
+                return Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: isCorrectAnswer
+                          ? Colors.green
+                          : (isWrongSelected ? Colors.red : Colors.transparent),
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: ElevatedButton(
+                    onPressed: !isAnswerSelected ? () => _checkAnswer(option) : null,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: isCorrectAnswer
+                          ? Colors.green
+                          : isWrongSelected
+                              ? Colors.red
+                              : null,
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                    ),
+                    child: Text(option),
+                  ),
+                );
+              }).toList(),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
