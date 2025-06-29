@@ -25,6 +25,7 @@ class _PaisesPageState extends State<PaisesPage> {
   final String title = 'Adivinhe o País pela Silhueta';
   bool isAnswerSelected = false;
 
+
   final Map<String, String> countryTranslations = {
     // América do Norte
     'United States Of America': 'Estados Unidos',
@@ -224,7 +225,7 @@ class _PaisesPageState extends State<PaisesPage> {
     'Vanuatu': 'Vanuatu',
   };
 
-  String displayName(String name) => countryTranslations[name] ?? name;
+   String displayName(String name) => countryTranslations[name] ?? name;
 
   @override
   void initState() {
@@ -241,7 +242,6 @@ class _PaisesPageState extends State<PaisesPage> {
       setState(() {
         countries = allCountries
             .where((c) => c['properties']?['name'] != null)
-            //.take(50) // Você pode tirar o take para pegar todos
             .cast<Map<String, dynamic>>()
             .toList();
         usedCountryNames.clear();
@@ -292,7 +292,6 @@ class _PaisesPageState extends State<PaisesPage> {
     final selectedIncorrect = (incorrect..shuffle()).take(3).toList();
     final allOptions = [correct, ...selectedIncorrect]..shuffle();
 
-    // Traduzir os nomes das opções
     return allOptions.map((name) => displayName(name ?? '')).toList();
   }
 
@@ -361,58 +360,61 @@ class _PaisesPageState extends State<PaisesPage> {
           ],
         ),
       ),
-     body: countries.isEmpty || currentCountry == null
-    ? const Center(child: CircularProgressIndicator())
-    : Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              height: 280,
-              padding: const EdgeInsets.all(12),
-              child: CustomPaint(
-                painter: CountryPainter(currentCountry?['geometry'] ?? {}),
-                child: Container(),
-              ),
-            ),
-            const SizedBox(height: 20),
-            Wrap(
-              spacing: 12,
-              runSpacing: 12,
-              alignment: WrapAlignment.center,
-              children: options.map((option) {
-                final isSelected = option == selectedAnswer;
-                final correctTranslated = displayName(currentCountry?['properties']?['name'] ?? '');
-                final isCorrectAnswer = isAnswerSelected && option == correctTranslated;
-                final isWrongSelected = isAnswerSelected && isSelected && !isCorrectAnswer;
+      body: SafeArea(
+        child: countries.isEmpty || currentCountry == null
+            ? const Center(child: CircularProgressIndicator())
+            : Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      height: 280,
+                      padding: const EdgeInsets.all(12),
+                      child: CustomPaint(
+                        painter: CountryPainter(currentCountry?['geometry'] ?? {}),
+                        child: Container(),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
 
-                return Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: isCorrectAnswer
-                          ? Colors.green
-                          : (isWrongSelected ? Colors.red : Colors.transparent),
-                      width: 2,
+                    // Scroll horizontal para as opções:
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: Row(
+                        children: options.map((option) {
+                          final isSelected = option == selectedAnswer;
+                          final correctTranslated = displayName(currentCountry?['properties']?['name'] ?? '');
+                          final isCorrectAnswer = isAnswerSelected && option == correctTranslated;
+                          final isWrongSelected = isAnswerSelected && isSelected && !isCorrectAnswer;
+
+                          return Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 6),
+                            width: 140, // largura fixa para não estourar a tela
+                            child: ElevatedButton(
+                              onPressed: !isAnswerSelected ? () => _checkAnswer(option) : null,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: isCorrectAnswer
+                                    ? Colors.green
+                                    : isWrongSelected
+                                        ? Colors.red
+                                        : null,
+                                padding: const EdgeInsets.symmetric(vertical: 12),
+                              ),
+                              child: Text(
+                                option,
+                                textAlign: TextAlign.center,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
                     ),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: ElevatedButton(
-                    onPressed: !isAnswerSelected ? () => _checkAnswer(option) : null,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: isCorrectAnswer
-                          ? Colors.green
-                          : isWrongSelected
-                              ? Colors.red
-                              : null,
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                    ),
-                    child: Text(option),
-                  ),
-                );
-              }).toList(),
-            ),
-          ],
-        ),
+                  ],
+                ),
+              ),
       ),
     );
   }
