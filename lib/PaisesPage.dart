@@ -360,62 +360,64 @@ class _PaisesPageState extends State<PaisesPage> {
           ],
         ),
       ),
-      body: SafeArea(
-        child: countries.isEmpty || currentCountry == null
-            ? const Center(child: CircularProgressIndicator())
-            : Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      height: 280,
-                      padding: const EdgeInsets.all(12),
-                      child: CustomPaint(
-                        painter: CountryPainter(currentCountry?['geometry'] ?? {}),
-                        child: Container(),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-
-                    // Scroll horizontal para as opções:
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      child: Row(
-                        children: options.map((option) {
-                          final isSelected = option == selectedAnswer;
-                          final correctTranslated = displayName(currentCountry?['properties']?['name'] ?? '');
-                          final isCorrectAnswer = isAnswerSelected && option == correctTranslated;
-                          final isWrongSelected = isAnswerSelected && isSelected && !isCorrectAnswer;
-
-                          return Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 6),
-                            width: 140, // largura fixa para não estourar a tela
-                            child: ElevatedButton(
-                              onPressed: !isAnswerSelected ? () => _checkAnswer(option) : null,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: isCorrectAnswer
-                                    ? Colors.green
-                                    : isWrongSelected
-                                        ? Colors.red
-                                        : null,
-                                padding: const EdgeInsets.symmetric(vertical: 12),
-                              ),
-                              child: Text(
-                                option,
-                                textAlign: TextAlign.center,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                  ],
+    body: SafeArea(
+  child: countries.isEmpty || currentCountry == null
+      ? const Center(child: CircularProgressIndicator())
+      : SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  height: 280,
+                  padding: const EdgeInsets.all(12),
+                  child: CustomPaint(
+                    painter: CountryPainter(currentCountry?['geometry'] ?? {}),
+                    child: Container(),
+                  ),
                 ),
-              ),
-      ),
+                const SizedBox(height: 20),
+
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: options.map((option) {
+                      final isSelected = option == selectedAnswer;
+                      final correctTranslated = displayName(currentCountry?['properties']?['name'] ?? '');
+                      final isCorrectAnswer = isAnswerSelected && option == correctTranslated;
+                      final isWrongSelected = isAnswerSelected && isSelected && !isCorrectAnswer;
+
+                      return Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 6),
+                        width: 140,
+                        child: ElevatedButton(
+                          onPressed: !isAnswerSelected ? () => _checkAnswer(option) : null,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: isCorrectAnswer
+                                ? Colors.green
+                                : isWrongSelected
+                                    ? Colors.red
+                                    : null,
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                          ),
+                          child: Text(
+                            option,
+                            textAlign: TextAlign.center,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+),
     );
   }
 }
